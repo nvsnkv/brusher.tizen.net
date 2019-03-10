@@ -56,5 +56,43 @@ namespace NVs.Brusher.Wearable.Tests
             var diff = Math.Abs(expectedTicksCount - actualTickCount);
             Assert.True(diff < 1);
         }
+
+        [Fact]
+        public async Task NotTickTwiceIfStartedTwice()
+        {
+            var precision = 100;
+            var duration = 500;
+
+            var expectedTicksCount = duration / precision;
+            var actualTickCount = 0;
+
+            var hb = new HeartBit(precision);
+            hb.Tick += (o, e) => actualTickCount++;
+            hb.Start();
+            
+            await Task.Delay(duration/2);
+           
+            hb.Start();
+
+            await Task.Delay(duration / 2);
+
+            hb.Stop();
+
+            var diff = Math.Abs(expectedTicksCount - actualTickCount);
+            Assert.True(diff < 1);
+        }
+
+        [Fact]
+        public async Task StopIfStoppedMultipleTimes()
+        {
+            var hb = new HeartBit(100);
+
+            hb.Start();
+            await Task.Delay(100);
+
+            hb.Stop();
+            hb.Stop();
+            hb.Stop();
+        }
     }
 }
