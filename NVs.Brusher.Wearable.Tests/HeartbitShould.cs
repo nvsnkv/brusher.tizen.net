@@ -44,6 +44,17 @@ namespace NVs.Brusher.Wearable.Tests
             var duration = 500;
 
             var expectedTicksCount = duration / precision;
+            var actualTickCount = 0;
+
+            var hb = new HeartBit(precision);
+            hb.Tick += (o, e) => actualTickCount++;
+            hb.Start();
+
+            await Task.Delay(duration);
+            hb.Stop();
+
+            var diff = Math.Abs(expectedTicksCount - actualTickCount);
+            Assert.True(diff < 1);
         }
     }
 }
