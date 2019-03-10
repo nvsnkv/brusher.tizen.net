@@ -1,8 +1,11 @@
-using System;
+using System.Runtime.CompilerServices;
+using Tizen.Wearable.CircularUI.Forms.Renderer;
+using Xamarin.Forms.Platform.Tizen;
 
+[assembly:InternalsVisibleTo("NVs.Brusher.Wearable.Tests")]
 namespace NVs.Brusher.Wearable.App
 {
-    class Program : global::Xamarin.Forms.Platform.Tizen.FormsApplication
+    class Program : FormsApplication
     {
         protected override void OnCreate()
         {
@@ -14,8 +17,8 @@ namespace NVs.Brusher.Wearable.App
         static void Main(string[] args)
         {
             var app = new Program();
-            global::Xamarin.Forms.Platform.Tizen.Forms.Init(app);
-            global::Tizen.Wearable.CircularUI.Forms.Renderer.FormsCircularUI.Init();
+            Forms.Init(app);
+            FormsCircularUI.Init();
             app.Run(args);
         }
     }

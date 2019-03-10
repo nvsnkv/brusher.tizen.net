@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace NVs.Brusher.Wearable.App
@@ -16,7 +10,7 @@ namespace NVs.Brusher.Wearable.App
         {
             InitializeComponent();
 
-            MainPage = new NVs.Brusher.Wearable.App.MainPage();
+            MainPage = new MainPage();
         }
 
         protected override void OnStart()
