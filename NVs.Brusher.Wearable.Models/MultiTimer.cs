@@ -1,19 +1,22 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using NVs.Brusher.Wearable.Models.Annotations;
 
 namespace NVs.Brusher.Wearable.Models
 {
-    public sealed class MultiTimer: INotifyPropertyChanged
+    public sealed class MultiTimer : INotifyPropertyChanged
     {
         private readonly int[] intervals;
         private readonly long total;
         private readonly HeartBit heartBit;
-        private long? totalRemainingSeconds;
-        private TimerState state;
-        
+        private long? totalRemainingTicks;
+        private volatile TimerState state;
+        private int intervalRemaining = -1;
+        private int intervalIndex = -1;
+
         public MultiTimer([NotNull] HeartBit heartBit, [NotNull] int[] intervals)
         {
             if (heartBit == null) throw new ArgumentNullException(nameof(heartBit));
@@ -27,13 +30,13 @@ namespace NVs.Brusher.Wearable.Models
             this.heartBit.Tick += TickHandler;
         }
 
-        public long? RemainingSeconds
+        public long? RemainingTicks
         {
-            get => totalRemainingSeconds;
+            get => totalRemainingTicks;
             private set
             {
-                if (value == totalRemainingSeconds) return;
-                totalRemainingSeconds = value;
+                if (value == totalRemainingTicks) return;
+                totalRemainingTicks = value;
                 RaisePropertyChanged();
             }
         }
@@ -56,13 +59,17 @@ namespace NVs.Brusher.Wearable.Models
         public void Start()
         {
             if (State == TimerState.Running) { return; }
+            
+            var previousState = State;
+            State = TimerState.Running;
 
-            if (State == TimerState.Stopped)
+            if (previousState == TimerState.Stopped)
             {
-                RemainingSeconds = total;
+                RemainingTicks = total;
+                intervalIndex = 0;
+                intervalRemaining = intervals[intervalIndex];
             }
 
-            State = TimerState.Running;
             heartBit.Start();
         }
 
@@ -80,14 +87,50 @@ namespace NVs.Brusher.Wearable.Models
             State = TimerState.Stopped;
 
             heartBit.Stop();
-            RemainingSeconds = null;
+            RemainingTicks = null;
         }
 
         private void TickHandler(object sender, EventArgs e)
         {
             if (State != TimerState.Running) { return; }
+            
+            RemainingTicks--;
 
-            throw new NotImplementedException();
+            if (intervalRemaining == 0)
+            {
+                TimeoutKind timeoutKind;
+
+                switch (intervalIndex)
+                {
+                    case int i when i == 0:
+                        timeoutKind = TimeoutKind.First;
+                        break;
+
+                    case int i when i == intervals.Length - 1:
+                        timeoutKind = TimeoutKind.Last;
+                        break;
+
+                    default:
+                        timeoutKind = TimeoutKind.Subsequent;
+                        break;
+                }
+
+                RaiseTimeout(timeoutKind);
+
+                if (intervalIndex < intervals.Length - 1)
+                {
+                    intervalIndex++;
+                    intervalRemaining = intervals[intervalIndex];
+                }
+                else
+                {
+                    Stop();
+                }
+            }
+            else
+            {
+                intervalRemaining--;
+            }
         }
 
         [NotifyPropertyChangedInvocator]
