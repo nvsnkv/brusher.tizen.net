@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace NVs.Brusher.Wearable.Models
+namespace NVs.Brusher.Wearable.Core
 {
     public sealed class HeartBit
     {

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using NVs.Brusher.Wearable.Models.Annotations;
 
-namespace NVs.Brusher.Wearable.Models
+namespace NVs.Brusher.Wearable.Core
 {
     public sealed class MultiTimer : INotifyPropertyChanged
     {

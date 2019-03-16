@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using NVs.Brusher.Wearable.Models;
+using NVs.Brusher.Wearable.Core;
 using Xunit;
 
 namespace NVs.Brusher.Wearable.Tests

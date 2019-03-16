@@ -30,7 +30,7 @@ using System;
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable InconsistentNaming
 
-namespace NVs.Brusher.Wearable.Models.Annotations
+namespace NVs.Brusher.Wearable.Core
 {
   /// <summary>
   /// Indicates that the value of the marked element could be <c>null</c> sometimes,

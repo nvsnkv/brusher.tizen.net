@@ -1,4 +1,4 @@
-﻿namespace NVs.Brusher.Wearable.Models
+﻿namespace NVs.Brusher.Wearable.Core
 {
     public enum TimerState
     {

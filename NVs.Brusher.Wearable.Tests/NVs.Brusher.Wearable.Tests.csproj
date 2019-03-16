@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NVs.Brusher.Wearable.Models\NVs.Brusher.Wearable.Models.csproj" />
+    <ProjectReference Include="..\NVs.Brusher.Wearable.Core\NVs.Brusher.Wearable.Core.csproj" />
   </ItemGroup>
 
 </Project>
