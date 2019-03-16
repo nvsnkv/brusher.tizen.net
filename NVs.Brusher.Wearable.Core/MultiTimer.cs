@@ -8,7 +8,6 @@ namespace NVs.Brusher.Wearable.Core
     public sealed class MultiTimer : INotifyPropertyChanged
     {
         private readonly int[] intervals;
-        private readonly long total;
         private readonly IHeartBit heartBit;
         private long? totalRemainingTicks;
         private volatile TimerState state;
@@ -23,10 +22,12 @@ namespace NVs.Brusher.Wearable.Core
                 throw new ArgumentException("Value cannot be an empty collection.", nameof(intervals));
 
             this.intervals = intervals;
-            this.total = intervals.Sum() + intervals.Length;
+            this.TotalTicks = intervals.Sum() + intervals.Length;
             this.heartBit = heartBit;
             this.heartBit.Tick += TickHandler;
         }
+
+        public long TotalTicks { get; }
 
         public long? RemainingTicks
         {
@@ -63,7 +64,7 @@ namespace NVs.Brusher.Wearable.Core
 
             if (previousState == TimerState.Stopped)
             {
-                RemainingTicks = total;
+                RemainingTicks = TotalTicks;
                 intervalIndex = 0;
                 intervalRemaining = intervals[intervalIndex];
             }

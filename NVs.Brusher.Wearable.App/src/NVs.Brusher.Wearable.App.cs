@@ -1,8 +1,6 @@
-using System.Runtime.CompilerServices;
 using Tizen.Wearable.CircularUI.Forms.Renderer;
 using Xamarin.Forms.Platform.Tizen;
 
-[assembly:InternalsVisibleTo("NVs.Brusher.Wearable.Tests")]
 namespace NVs.Brusher.Wearable.App
 {
     class Program : FormsApplication
