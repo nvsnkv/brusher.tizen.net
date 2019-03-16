@@ -12,6 +12,7 @@
     <DebugType>None</DebugType>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="res\toothbrush-360.png" />
     <None Remove="shared\res\toothbrush-360.png" />
   </ItemGroup>
   <ItemGroup>
@@ -20,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="lib\" />
-    <Folder Include="res\" />
     <Folder Include="src\ViewModels\" />
   </ItemGroup>
 
