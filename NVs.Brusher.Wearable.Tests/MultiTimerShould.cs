@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NVs.Brusher.Wearable.Core;
+using NVs.Brusher.Wearable.Infrastructure;
 using Xunit;
 
 namespace NVs.Brusher.Wearable.Tests

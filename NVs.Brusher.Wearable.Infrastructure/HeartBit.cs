@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using NVs.Brusher.Wearable.Core;
 
-namespace NVs.Brusher.Wearable.Core
+namespace NVs.Brusher.Wearable.Infrastructure
 {
-    public sealed class HeartBit
+    public sealed class HeartBit : IHeartBit
     {
         private readonly object thisLock = new object();
         private readonly int precision;
         private CancellationTokenSource cts;
 
         private volatile bool isRunning;
-        
+
         public HeartBit(int precision)
         {
             this.precision = precision;
@@ -19,7 +20,7 @@ namespace NVs.Brusher.Wearable.Core
 
         public void Start()
         {
-            if (isRunning) {  return; }
+            if (isRunning) { return; }
 
             lock (thisLock)
             {

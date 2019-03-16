@@ -9,13 +9,13 @@ namespace NVs.Brusher.Wearable.Core
     {
         private readonly int[] intervals;
         private readonly long total;
-        private readonly HeartBit heartBit;
+        private readonly IHeartBit heartBit;
         private long? totalRemainingTicks;
         private volatile TimerState state;
         private int intervalRemaining = -1;
         private int intervalIndex = -1;
 
-        public MultiTimer([NotNull] HeartBit heartBit, [NotNull] int[] intervals)
+        public MultiTimer([NotNull] IHeartBit heartBit, [NotNull] int[] intervals)
         {
             if (heartBit == null) throw new ArgumentNullException(nameof(heartBit));
             if (intervals == null) throw new ArgumentNullException(nameof(intervals));

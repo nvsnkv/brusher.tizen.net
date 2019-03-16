@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NVs.Brusher.Wearable.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NVs.Brusher.Wearable.Core", "NVs.Brusher.Wearable.Core\NVs.Brusher.Wearable.Core.csproj", "{23A093A1-E604-4AD9-9435-05EC761A5008}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVs.Brusher.Wearable.Infrastructure", "NVs.Brusher.Wearable.Infrastructure\NVs.Brusher.Wearable.Infrastructure.csproj", "{9F15345F-72F8-453E-9BF0-25871F2C24E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{23A093A1-E604-4AD9-9435-05EC761A5008}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23A093A1-E604-4AD9-9435-05EC761A5008}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23A093A1-E604-4AD9-9435-05EC761A5008}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F15345F-72F8-453E-9BF0-25871F2C24E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F15345F-72F8-453E-9BF0-25871F2C24E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F15345F-72F8-453E-9BF0-25871F2C24E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F15345F-72F8-453E-9BF0-25871F2C24E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
