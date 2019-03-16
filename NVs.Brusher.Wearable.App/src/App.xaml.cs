@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using NVs.Brusher.Wearable.App.Views;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace NVs.Brusher.Wearable.App
@@ -10,7 +11,7 @@ namespace NVs.Brusher.Wearable.App
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new TimerView();
         }
 
         protected override void OnStart()

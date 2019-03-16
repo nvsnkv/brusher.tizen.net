@@ -1,15 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns="http://tizen.org/ns/packages" api-version="4" package="org.tizen.example.NVs.Brusher.Wearable.App" version="1.0.0">
-	<profile name="wearable" />
-	<ui-application appid="org.tizen.example.NVs.Brusher.Wearable.App"
-					exec="NVs.Brusher.Wearable.App.dll"
-					type="dotnet"
-					multiple="false"
-					taskmanage="true"
-					nodisplay="false"
-					launch_mode="single">
-  <label>NVs.Brusher.Wearable.App</label>
-	<icon>NVs.Brusher.Wearable.App.png</icon>
+<manifest package="nvsnkv.NVs.Brusher.Wearable.App" version="0.2.0" api-version="4" xmlns="http://tizen.org/ns/packages">
+    <author email="nvsnkv@gmail.com" href="https://github.com/nvsnkv">Nikita Senkov</author>
+    <description>
+        Brusher.
+
+        A simple application that helps you keep your teeths clean.
+        Icons made by &lt;a href=\"https://www.flaticon.com/authors/creaticca-creative-agency\" title=\"Creaticca Creative Agency\"&gt;Creaticca Creative Agency&lt;/a&gt; from &lt;a href=\"https://www.flaticon.com/\" title=\"Flaticon\"&gt;www.flaticon.com&lt;/a&gt; is licensed by &lt;a href=\"http://creativecommons.org/licenses/by/3.0/\" title=\"Creative Commons BY 3.0\" target=\"_blank\"&gt;CC 3.0 BY&lt;/a&gt;
+    </description>
+    <profile name="wearable" />
+    <ui-application appid="nvsnkv.NVs.Brusher.Wearable.App" exec="NVs.Brusher.Wearable.App.dll" multiple="false" nodisplay="false" taskmanage="true" type="dotnet" launch_mode="single">
+        <label>Brusher</label>
+        <icon>toothbrush-360.png</icon>
         <metadata key="http://tizen.org/metadata/prefer_dotnet_aot" value="true" />
-	</ui-application>
+        <splash-screens />
+    </ui-application>
+    <shortcut-list />
+    <provides-appdefined-privileges />
+    <feature name="http://tizen.org/feature/screen.size.normal.360.360">true</feature>
+    <feature name="http://tizen.org/feature/screen.shape.circle">true</feature>
 </manifest>

@@ -1,12 +1,12 @@
 ﻿using Tizen.Wearable.CircularUI.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace NVs.Brusher.Wearable.App
+namespace NVs.Brusher.Wearable.App.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class MainPage : CirclePage
+    public partial class TimerView : CirclePage
     {
-        public MainPage()
+        public TimerView()
         {
             InitializeComponent();
         }
