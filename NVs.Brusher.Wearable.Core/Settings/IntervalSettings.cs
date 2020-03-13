@@ -9,7 +9,7 @@ namespace NVs.Brusher.Wearable.Core.Settings
 
         public IntervalSettings()
         {
-            delay = TimeSpan.FromMilliseconds(1);
+            delay = TimeSpan.FromMilliseconds(1000);
             repeats = 1;
         }
 

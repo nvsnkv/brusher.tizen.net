@@ -47,6 +47,16 @@ namespace NVs.Brusher.Wearable.Tests
         }
 
         [Fact]
+        public void BeDifferentIfHeartBitsAreDifferent()
+        {
+            var (left, right) = GetNewStandardBrushingSettingsInstances();
+            right.HeartBitInterval = 3 * left.HeartBitInterval;
+
+            Assert.False(Equals(right.HeartBitInterval, left.HeartBitInterval));
+            Assert.False(Equals(left, right));
+        }
+
+        [Fact]
         public void BeDifferentIfPolishingAndSweepingSettingsAreDifferent()
         {
             var (left, right) = GetNewStandardBrushingSettingsInstances();
@@ -71,7 +81,47 @@ namespace NVs.Brusher.Wearable.Tests
         }
 
         [Fact]
-        public void BeDifferentIfEverythingIsDifferent()
+        public void BeDifferentIfPolishingAndHeartBitAreDifferent()
+        {
+            var (left, right) = GetNewStandardBrushingSettingsInstances();
+            right.PolishingSettings.Repeats = left.PolishingSettings.Repeats - 2;
+            right.HeartBitInterval = 3 * left.HeartBitInterval;
+
+            Assert.False(Equals(right.HeartBitInterval, left.HeartBitInterval));
+            Assert.False(Equals(right.PolishingSettings, left.PolishingSettings));
+            Assert.False(Equals(left, right));
+        }
+
+        [Fact]
+        public void BeDifferentIfPolishingAndSweepingSettingsAndHeartBitAreDifferent()
+        {
+            var (left, right) = GetNewStandardBrushingSettingsInstances();
+            right.PolishingSettings.Repeats = left.PolishingSettings.Repeats - 2;
+            right.SweepingSettings.Enabled = !left.SweepingSettings.Enabled;
+            right.HeartBitInterval = 3 * left.HeartBitInterval;
+
+            Assert.False(Equals(right.SweepingSettings, left.SweepingSettings));
+            Assert.False(Equals(right.PolishingSettings, left.PolishingSettings));
+            Assert.False(Equals(right.HeartBitInterval, left.HeartBitInterval));
+            Assert.False(Equals(left, right));
+        }
+
+        [Fact]
+        public void BeDifferentIfPolishingAndCleaningSettingsAndHeartBitAreDifferent()
+        {
+            var (left, right) = GetNewStandardBrushingSettingsInstances();
+            right.PolishingSettings.Repeats = left.PolishingSettings.Repeats - 2;
+            right.CleaningSettings.Enabled = !left.CleaningSettings.Enabled;
+            right.HeartBitInterval = 3 * left.HeartBitInterval;
+
+            Assert.False(Equals(right.CleaningSettings, left.CleaningSettings));
+            Assert.False(Equals(right.PolishingSettings, left.PolishingSettings));
+            Assert.False(Equals(right.HeartBitInterval, left.HeartBitInterval));
+            Assert.False(Equals(left, right));
+        }
+
+        [Fact]
+        public void BeDifferentIfEverythingExceptHeartBitIsDifferent()
         {
             var (left, right) = GetNewStandardBrushingSettingsInstances();
             right.PolishingSettings.Repeats = left.PolishingSettings.Repeats - 2;
@@ -82,6 +132,36 @@ namespace NVs.Brusher.Wearable.Tests
             Assert.False(Equals(right.PolishingSettings, left.PolishingSettings));
             Assert.False(Equals(right.SweepingSettings, left.SweepingSettings));
             Assert.False(Equals(left, right));
+        }
+
+        [Fact]
+        public void BeDifferentIfEverythingIsDifferent()
+        {
+            var (left, right) = GetNewStandardBrushingSettingsInstances();
+            right.PolishingSettings.Repeats = left.PolishingSettings.Repeats - 2;
+            right.CleaningSettings.Enabled = !left.CleaningSettings.Enabled;
+            right.SweepingSettings.Delay = 2 * left.SweepingSettings.Delay;
+            right.HeartBitInterval = 3 * left.HeartBitInterval;
+
+            Assert.False(Equals(right.CleaningSettings, left.CleaningSettings));
+            Assert.False(Equals(right.PolishingSettings, left.PolishingSettings));
+            Assert.False(Equals(right.SweepingSettings, left.SweepingSettings));
+            Assert.False(Equals(right.HeartBitInterval, left.HeartBitInterval));
+            Assert.False(Equals(left, right));
+        }
+
+
+        [Fact]
+        public void NotAcceptZeroHeartBitIntervals()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                // ReSharper disable once ObjectCreationAsStatement
+                new BrushingSettings()
+                {
+                    HeartBitInterval = TimeSpan.Zero
+                };
+            });
         }
 
         private (BrushingSettings, BrushingSettings) GetNewStandardBrushingSettingsInstances()
@@ -107,7 +187,10 @@ namespace NVs.Brusher.Wearable.Tests
                     Enabled = true,
                     Delay = TimeSpan.FromMilliseconds(5000),
                     Repeats = 3
-                }
+                },
+
+                HeartBitInterval = TimeSpan.FromMilliseconds(1000)
+
             }, new BrushingSettings()
             {
                 SweepingSettings =
@@ -129,7 +212,9 @@ namespace NVs.Brusher.Wearable.Tests
                     Enabled = true,
                     Delay = TimeSpan.FromMilliseconds(5000),
                     Repeats = 3
-                }
+                },
+
+                HeartBitInterval = TimeSpan.FromMilliseconds(1000)
             });
         }
     }

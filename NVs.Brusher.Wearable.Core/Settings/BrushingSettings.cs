@@ -10,6 +10,7 @@ namespace NVs.Brusher.Wearable.Core.Settings
             SweepingSettings = new IntervalSettings();
             CleaningSettings = new IntervalSettings();
             PolishingSettings = new IntervalSettings();
+            HeartBitInterval = TimeSpan.FromMilliseconds(1000);
         }
 
         public IntervalSettings SweepingSettings { get; private set; }
@@ -17,6 +18,17 @@ namespace NVs.Brusher.Wearable.Core.Settings
         public IntervalSettings CleaningSettings { get; private set; }
 
         public IntervalSettings PolishingSettings { get; private set; }
+
+        public TimeSpan HeartBitInterval
+        {
+            get => heartBitInterval;
+            set
+            {
+                if (value <= TimeSpan.Zero) throw new ArgumentException("Interval provided is too short", nameof(HeartBitInterval));
+                
+                heartBitInterval = value;
+            }
+        }
 
         public static readonly BrushingSettings Default = new BrushingSettings()
         {
@@ -37,12 +49,16 @@ namespace NVs.Brusher.Wearable.Core.Settings
                 Enabled = true,
                 Delay = TimeSpan.FromSeconds(5),
                 Repeats = 3
-            }
+            },
+            
+            HeartBitInterval = TimeSpan.FromSeconds(1)
         };
+
+        private TimeSpan heartBitInterval;
 
         private bool Equals(BrushingSettings other)
         {
-            return Equals(SweepingSettings, other.SweepingSettings) && Equals(CleaningSettings, other.CleaningSettings) && Equals(PolishingSettings, other.PolishingSettings);
+            return heartBitInterval.Equals(other.heartBitInterval) && Equals(SweepingSettings, other.SweepingSettings) && Equals(CleaningSettings, other.CleaningSettings) && Equals(PolishingSettings, other.PolishingSettings);
         }
 
         public override bool Equals(object obj)
@@ -54,7 +70,8 @@ namespace NVs.Brusher.Wearable.Core.Settings
         {
             unchecked
             {
-                var hashCode = (SweepingSettings != null ? SweepingSettings.GetHashCode() : 0);
+                var hashCode = heartBitInterval.GetHashCode();
+                hashCode = (hashCode * 397) ^ (SweepingSettings != null ? SweepingSettings.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (CleaningSettings != null ? CleaningSettings.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (PolishingSettings != null ? PolishingSettings.GetHashCode() : 0);
                 return hashCode;
