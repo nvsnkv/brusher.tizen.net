@@ -4,6 +4,14 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <TizenCreateTpkOnBuild>false</TizenCreateTpkOnBuild>
+    <Version>0.2.0</Version>
+    <Authors>nvsnkv</Authors>
+    <Company />
+    <Description>Platform-specific interface implementations for NVs.Brusher.Wearable</Description>
+    <Copyright>© nvsnkv, 2020</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/nvsnkv/brusher.tizen.net</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
