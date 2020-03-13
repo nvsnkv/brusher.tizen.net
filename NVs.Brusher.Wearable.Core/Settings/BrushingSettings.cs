@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NVs.Brusher.Wearable.Core.Timer;
 
 namespace NVs.Brusher.Wearable.Core.Settings
 {
@@ -76,6 +77,15 @@ namespace NVs.Brusher.Wearable.Core.Settings
                 hashCode = (hashCode * 397) ^ (PolishingSettings != null ? PolishingSettings.GetHashCode() : 0);
                 return hashCode;
             }
+        }
+    }
+
+    public static class BrushingTimerBuilder
+    {
+        public static BrushingTimer WithSettings(this BrushingTimer timer, BrushingSettings settings)
+        {
+            timer.SetSettings(settings);
+            return timer;
         }
     }
 }
