@@ -37,39 +37,25 @@ namespace NVs.Brusher.Wearable.Core.Timer
 
         public void Start()
         {
-            UpdateStateTo(TimerState.Running);
+            State = TimerState.Running;
         }
 
         public void Pause()
         {
-            UpdateStateTo(TimerState.Paused);
-        }
-
-        private void UpdateStateTo(TimerState newState)
-        {
-            if (state == newState)
+            if (State != TimerState.Running)
             {
                 return;
             }
 
-            switch (state)
-            {
-                case TimerState.Stopped:
-                    if (newState == TimerState.Paused)
-                    {
-                        return;
-                    }
-                    break;
-                case TimerState.Paused:
-                    break;
-                case TimerState.Running:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            State = newState;
+            State = TimerState.Paused;
         }
+
+        public void Stop()
+        {
+            State = TimerState.Stopped;
+        }
+
+        
 
         [NotifyPropertyChangedInvocator]
         private void RaisePropertyChanged([CallerMemberName] string propertyName = null)

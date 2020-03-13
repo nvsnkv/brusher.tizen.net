@@ -6,48 +6,13 @@ using Xunit;
 
 namespace NVs.Brusher.Wearable.Tests
 {
-    public sealed class BrushingTimerShould
+    public sealed class Settings_BrushingTimerShould
     {
         [Fact]
         public void HaveDefaultSettingsAfterCreation()
         {
             var timer = new BrushingTimer();
             Assert.Equal(timer.Settings, BrushingSettings.Default);
-        }
-
-        [Fact]
-        public void BeStoppedByDefault()
-        {
-            var timer = new BrushingTimer();
-            Assert.Equal(TimerState.Stopped, timer.State);
-        }
-
-        [Fact]
-        public void BeRunningIfWasStarted()
-        {
-            var timer = new BrushingTimer();
-            timer.Start();
-
-            Assert.Equal(TimerState.Running, timer.State);
-        }
-
-        [Fact]
-        public void BePausedIfWasPaused()
-        {
-            var timer = new BrushingTimer();
-            timer.Start();
-            timer.Pause();
-
-            Assert.Equal(TimerState.Paused, timer.State);
-        }
-
-        [Fact]
-        public void StayStoppedIfWasPausedBeingStopped()
-        {
-            var timer = new BrushingTimer();
-            timer.Pause();
-
-            Assert.Equal(TimerState.Stopped, timer.State);
         }
 
 
