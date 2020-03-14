@@ -88,7 +88,8 @@ namespace NVs.Brusher.Wearable.Tests
             Assert.Equal(15, actual.Count); // initial calculation , 13 ticks and Zero -> null notification
             foreach (var (remaining, elapsed) in actual)
             {
-                Assert.True(remainingDuration - (remaining ?? TimeSpan.Zero) - elapsed < TimeSpan.FromMilliseconds(10));
+                Assert.True((remainingDuration - (remaining ?? TimeSpan.Zero) - elapsed) < TimeSpan.FromMilliseconds(100));
+                Assert.True(TimeSpan.FromMilliseconds(-100) < (remainingDuration - (remaining ?? TimeSpan.Zero) - elapsed));
             }
         }
 
