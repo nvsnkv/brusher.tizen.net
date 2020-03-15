@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Moq;
 using NVs.Brusher.Wearable.Core.Settings;
 using NVs.Brusher.Wearable.Core.Timer;
 using Xunit;
@@ -10,6 +11,8 @@ namespace NVs.Brusher.Wearable.Tests
 {
     public class Progress_BrushingTimerShould
     {
+        private static readonly INotificator Notificator = new Mock<INotificator>().Object;
+
         [Theory]
         [InlineData(true, 300, 2, true, 200, 3, true, 300, 1)]
         [InlineData(true, 300, 2, false, 200, 3, true, 300, 1)]
@@ -20,7 +23,7 @@ namespace NVs.Brusher.Wearable.Tests
 
         public void CalculateTotalDurationFromSetupCorrectly(bool sweepEnabled, long sweepDelay, int sweepRepeats, bool cleanEnabled, long cleanDelay, int cleanRepeats, bool polishEnabled, long polishDelay, int polishRepeats)
         {
-            var timer = new BrushingTimer();
+            var timer = new BrushingTimer(Notificator);
             timer.SetSettings(new BrushingSettings()
             {
                 SweepingSettings =                                  
@@ -62,7 +65,7 @@ namespace NVs.Brusher.Wearable.Tests
         {
             var stopwatch = new Stopwatch();
             var actual = new List<(TimeSpan?, TimeSpan)>();
-            var timer = new BrushingTimer();
+            var timer = new BrushingTimer(Notificator);
             timer.SetSettings(new BrushingSettings()
             {
                 CleaningSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(300), Repeats = 2 },
@@ -88,15 +91,15 @@ namespace NVs.Brusher.Wearable.Tests
             Assert.Equal(15, actual.Count); // initial calculation , 13 ticks and Zero -> null notification
             foreach (var (remaining, elapsed) in actual)
             {
-                Assert.True((remainingDuration - (remaining ?? TimeSpan.Zero) - elapsed) < TimeSpan.FromMilliseconds(100));
-                Assert.True(TimeSpan.FromMilliseconds(-100) < (remainingDuration - (remaining ?? TimeSpan.Zero) - elapsed));
+                Assert.True((remainingDuration - (remaining ?? TimeSpan.Zero) - elapsed) < TimeSpan.FromMilliseconds(200));
+                Assert.True(TimeSpan.FromMilliseconds(-200) < (remainingDuration - (remaining ?? TimeSpan.Zero) - elapsed));
             }
         }
 
         [Fact]
         public async Task StopOnCountdownZero()
         {
-            var timer = new BrushingTimer().WithSettings(new BrushingSettings()
+            var timer = new BrushingTimer(Notificator).WithSettings(new BrushingSettings()
             {
                 CleaningSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(100), Repeats = 5}, 
                 HeartBitInterval = TimeSpan.FromMilliseconds(100)

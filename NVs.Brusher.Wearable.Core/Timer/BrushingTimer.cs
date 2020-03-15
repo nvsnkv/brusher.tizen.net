@@ -12,12 +12,18 @@ namespace NVs.Brusher.Wearable.Core.Timer
 {
     public sealed class BrushingTimer : INotifyPropertyChanged
     {
+        private readonly INotificator notificator;
         private readonly object thisLock = new object();
         private volatile bool stateChangeIsInProgress;
 
         private TimerState state = TimerState.Stopped;
         private TimeSpan? remainingDuration;
         private System.Threading.Timer timer;
+
+        public BrushingTimer(INotificator notificator)
+        {
+            this.notificator = notificator;
+        }
 
         public BrushingSettings Settings { get; private set; } = BrushingSettings.Default;
 
@@ -242,6 +248,7 @@ namespace NVs.Brusher.Wearable.Core.Timer
 
             public void Stop()
             {
+                timer.notificator.NotifyTimerFinished();
                 timer.Stop();
             }
         }
