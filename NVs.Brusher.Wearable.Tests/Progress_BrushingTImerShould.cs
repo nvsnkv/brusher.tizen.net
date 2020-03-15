@@ -41,7 +41,7 @@ namespace NVs.Brusher.Wearable.Tests
                 {
                     Enabled = polishEnabled,
                     Delay = TimeSpan.FromMilliseconds(polishDelay),
-                    Repeats = 1
+                    Repeats = polishRepeats
                 },
             });
 
