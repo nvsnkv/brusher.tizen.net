@@ -5,5 +5,6 @@ namespace NVs.Brusher.Wearable.Core.Timer
     public interface INotificator
     {
         void NotifyTimerFinished();
+        void NotifyStageChanged();
     }
 }

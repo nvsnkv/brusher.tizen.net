@@ -146,6 +146,12 @@ namespace NVs.Brusher.Wearable.Core.Timer
             AddDelays(Settings.CleaningSettings, schedule);
             AddDelays(Settings.SweepingSettings, schedule);
 
+            if (schedule.Count > 0)
+            {
+                schedule.Pop();
+                schedule.Push(new NotifyTimerFinishedTimerAction());
+            }
+
             var duration = TimeSpan.Zero;
             foreach (var action in schedule)
             {
@@ -187,6 +193,14 @@ namespace NVs.Brusher.Wearable.Core.Timer
                     case CountdownTimerAction countdown:
                         context.CurrentDelay = countdown.Delay;
                         break;
+
+                    case NotifyStageChangedTimerAction _:
+                        context.NotifyStageChanged();
+                        break;
+
+                    case NotifyTimerFinishedTimerAction _:
+                        context.NotifyTimerFinished();
+                        break;
                 }
             }
 
@@ -210,6 +224,7 @@ namespace NVs.Brusher.Wearable.Core.Timer
             {
                 schedule.Push(new CountdownTimerAction(intervalSettings.Delay));
             }
+            schedule.Push(new NotifyStageChangedTimerAction());
         }
 
 
@@ -246,9 +261,18 @@ namespace NVs.Brusher.Wearable.Core.Timer
                 timer.RemainingDuration = timer.RemainingDuration.Value.Subtract(timer.Settings.HeartBitInterval);
             }
 
-            public void Stop()
+            public void NotifyStageChanged()
+            {
+                timer.notificator.NotifyStageChanged();
+            }
+
+            public void NotifyTimerFinished()
             {
                 timer.notificator.NotifyTimerFinished();
+            }
+
+            public void Stop()
+            {
                 timer.Stop();
             }
         }
