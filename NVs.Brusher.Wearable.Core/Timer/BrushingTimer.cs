@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using NVs.Brusher.Wearable.Core.Annotations;
 using NVs.Brusher.Wearable.Core.Settings;
@@ -10,7 +8,7 @@ using NVs.Brusher.Wearable.Core.Timer.Actions;
 
 namespace NVs.Brusher.Wearable.Core.Timer
 {
-    public sealed class BrushingTimer : INotifyPropertyChanged
+    public sealed partial class BrushingTimer : INotifyPropertyChanged
     {
         private readonly INotificator notificator;
         private readonly object thisLock = new object();
@@ -50,6 +48,8 @@ namespace NVs.Brusher.Wearable.Core.Timer
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public event ExceptionRaisedEventHandler AsyncExceptionRaised;
 
         public void SetSettings(BrushingSettings settings)
         {
@@ -142,15 +142,14 @@ namespace NVs.Brusher.Wearable.Core.Timer
         {
             var context = new TickContext(this);
             var schedule = context.Actions;
+
+            schedule.Push(new NotifyTimerFinishedTimerAction());
+
             AddDelays(Settings.PolishingSettings, schedule);
             AddDelays(Settings.CleaningSettings, schedule);
             AddDelays(Settings.SweepingSettings, schedule);
 
-            if (schedule.Count > 0)
-            {
-                schedule.Pop();
-                schedule.Push(new NotifyTimerFinishedTimerAction());
-            }
+            schedule.Push(new NotifyTimerStartedTimerAction());
 
             var duration = TimeSpan.Zero;
             foreach (var action in schedule)
@@ -164,53 +163,8 @@ namespace NVs.Brusher.Wearable.Core.Timer
             }
 
             RemainingDuration = duration;
-            timer = new System.Threading.Timer(OnTick, context, TimeSpan.FromMilliseconds(-1), Settings.HeartBitInterval);
-        }
-
-        private void OnTick(object o)
-        {
-            if (!(o is TickContext context))
-            {
-                return;
-            }
-
-            while (!context.CurrentDelay.HasValue)
-            {
-                if (!context.TimerRunning)
-                {
-                    return;
-                }
-
-                if (context.Actions.Count == 0)
-                {
-                    context.Stop();
-                    return;
-                }
-
-                var action = context.Actions.Pop();
-                switch (action)
-                {
-                    case CountdownTimerAction countdown:
-                        context.CurrentDelay = countdown.Delay;
-                        break;
-
-                    case NotifyStageChangedTimerAction _:
-                        context.NotifyStageChanged();
-                        break;
-
-                    case NotifyTimerFinishedTimerAction _:
-                        context.NotifyTimerFinished();
-                        break;
-                }
-            }
-
-            context.CurrentDelay = context.CurrentDelay.Value.Subtract(context.HeartbitInterval);
-            context.DecreaseRemaining();
-
-            if (context.CurrentDelay <= TimeSpan.Zero)
-            {
-                context.CurrentDelay = null;
-            }
+            timer = new System.Threading.Timer(OnTick, context, TimeSpan.FromMilliseconds(-1),
+                Settings.HeartBitInterval);
         }
 
         private void AddDelays(IntervalSettings intervalSettings, Stack<TimerAction> schedule)
@@ -220,11 +174,16 @@ namespace NVs.Brusher.Wearable.Core.Timer
                 return;
             }
 
-            for (var i = 0; i < intervalSettings.Repeats; i++)
+            if (schedule.Count > 1)
+            {
+                schedule.Push(new NotifyStageChangedTimerAction());
+            }
+
+            for (var i = intervalSettings.Repeats - 1; i >= 0 ; i--)
             {
                 schedule.Push(new CountdownTimerAction(intervalSettings.Delay));
             }
-            schedule.Push(new NotifyStageChangedTimerAction());
+
         }
 
 
@@ -233,48 +192,17 @@ namespace NVs.Brusher.Wearable.Core.Timer
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+    }
 
-        private class TickContext
+    public delegate void ExceptionRaisedEventHandler(object sender, ExceptionRaisedEventArgs args);
+
+    public sealed class ExceptionRaisedEventArgs : EventArgs
+    {
+        public ExceptionRaisedEventArgs(Exception exception)
         {
-            private readonly BrushingTimer timer;
-
-            public TickContext(BrushingTimer timer)
-            {
-                this.timer = timer;
-            }
-
-            public TimeSpan? CurrentDelay { get; set; }
-
-            public Stack<TimerAction> Actions { get; } = new Stack<TimerAction>();
-
-            public bool TimerRunning => timer.State == TimerState.Running;
-
-            public TimeSpan HeartbitInterval => timer.Settings.HeartBitInterval;
-
-            public void DecreaseRemaining()
-            {
-                if (!timer.RemainingDuration.HasValue)
-                {
-                    return;
-                }
-
-                timer.RemainingDuration = timer.RemainingDuration.Value.Subtract(timer.Settings.HeartBitInterval);
-            }
-
-            public void NotifyStageChanged()
-            {
-                timer.notificator.NotifyStageChanged();
-            }
-
-            public void NotifyTimerFinished()
-            {
-                timer.notificator.NotifyTimerFinished();
-            }
-
-            public void Stop()
-            {
-                timer.Stop();
-            }
+            Exception = exception;
         }
+
+        public Exception Exception { get; }
     }
 }

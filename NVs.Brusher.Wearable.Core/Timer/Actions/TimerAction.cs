@@ -15,6 +15,10 @@ namespace NVs.Brusher.Wearable.Core.Timer.Actions
     {
     }
 
+    sealed class NotifyTimerStartedTimerAction : TimerAction
+    {
+    }
+
     sealed class CountdownTimerAction : TimerAction
     {
         public CountdownTimerAction(TimeSpan delay)

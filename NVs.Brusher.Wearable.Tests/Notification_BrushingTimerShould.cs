@@ -16,12 +16,12 @@ namespace NVs.Brusher.Wearable.Tests
 
             var timer = new BrushingTimer(notificator.Object).WithSettings(new BrushingSettings()
             {
-                CleaningSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(100), Repeats = 1},
+                CleaningSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(100), Repeats = 1 },
                 HeartBitInterval = TimeSpan.FromMilliseconds(100)
             });
 
             timer.Start();
-            await Task.Delay(timer.RemainingDuration.Value + 2*timer.Settings.HeartBitInterval);
+            await Task.Delay(timer.RemainingDuration.Value + 2 * timer.Settings.HeartBitInterval);
 
             Assert.Equal(TimerState.Stopped, timer.State);
             notificator.Verify(x => x.NotifyTimerFinished(), Times.Once);
@@ -53,6 +53,53 @@ namespace NVs.Brusher.Wearable.Tests
 
             Assert.Equal(TimerState.Stopped, timer.State);
             notificator.Verify(x => x.NotifyStageChanged(), Times.Exactly(expectedTimes));
+        }
+
+        [Fact]
+        public async void NotifyWhenProgramStarts()
+        {
+            var notificator = new Mock<INotificator>();
+
+            var timer = new BrushingTimer(notificator.Object).WithSettings(new BrushingSettings()
+            {
+                CleaningSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(100), Repeats = 1 },
+                HeartBitInterval = TimeSpan.FromMilliseconds(100)
+            });
+
+            timer.Start();
+            await Task.Delay(timer.Settings.HeartBitInterval);
+
+            timer.Stop();
+            notificator.Verify(x => x.NotifyTimerStarted(), Times.Once);
+        }
+
+        [Fact]
+        public async void SendNotificationsInCorrectOrder()
+        {
+            var notificator = new Mock<INotificator>();
+            var callOrder = 0;
+            notificator.Setup(x => x.NotifyTimerStarted()).Callback(() => Assert.Equal(0, callOrder++));
+            notificator.Setup(x => x.NotifyStageChanged()).Callback(() => Assert.Equal(1, callOrder++));
+            notificator.Setup(x => x.NotifyTimerFinished()).Callback(() => Assert.Equal(2, callOrder++));
+
+            Exception exception = null;
+
+            var timer = new BrushingTimer(notificator.Object).WithSettings(new BrushingSettings()
+            {
+                SweepingSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(100), Repeats = 1 },
+                CleaningSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(100), Repeats = 1 },
+                HeartBitInterval = TimeSpan.FromMilliseconds(100)
+            });
+
+            timer.AsyncExceptionRaised += (o, e) => exception = e.Exception;
+
+            timer.Start();
+            await Task.Delay(timer.RemainingDuration.Value + 2 * timer.Settings.HeartBitInterval);
+
+            if (exception != null)
+            {
+                throw exception;
+            }
         }
     }
 }
