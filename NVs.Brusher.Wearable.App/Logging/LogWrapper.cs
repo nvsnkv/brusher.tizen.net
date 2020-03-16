@@ -5,11 +5,11 @@ namespace NVs.Brusher.Wearable.App.Logging
 {
     public class LogWrapper<T> : ILogger<T>
     {
+        private string TypeName => typeof(T).Name;
+
         private readonly LogLevel minimalLogLevel;
         private static string Tag { get; set; } = nameof(BrusherApp);
-
-        private string TypeName => nameof(T);
-
+        
         public LogWrapper(LogLevel minimalLogLevel)
         {
             this.minimalLogLevel = minimalLogLevel;
