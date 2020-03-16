@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NVs.Brusher.Wearable.Core.Settings;
 using NVs.Brusher.Wearable.Core.Timer;
@@ -12,6 +13,7 @@ namespace NVs.Brusher.Wearable.Tests
     public class Progress_BrushingTimerShould
     {
         private static readonly INotificator Notificator = new Mock<INotificator>().Object;
+        private static readonly ILogger<BrushingTimer> Logger = new Mock<ILogger<BrushingTimer>>().Object;
 
         [Theory]
         [InlineData(true, 300, 2, true, 200, 3, true, 300, 1)]
@@ -23,7 +25,7 @@ namespace NVs.Brusher.Wearable.Tests
 
         public void CalculateTotalDurationFromSetupCorrectly(bool sweepEnabled, long sweepDelay, int sweepRepeats, bool cleanEnabled, long cleanDelay, int cleanRepeats, bool polishEnabled, long polishDelay, int polishRepeats)
         {
-            var timer = new BrushingTimer(Notificator);
+            var timer = new BrushingTimer(Notificator, Logger);
             timer.SetSettings(new BrushingSettings()
             {
                 SweepingSettings =                                  
@@ -65,7 +67,7 @@ namespace NVs.Brusher.Wearable.Tests
         {
             var stopwatch = new Stopwatch();
             var actual = new List<(TimeSpan?, TimeSpan)>();
-            var timer = new BrushingTimer(Notificator);
+            var timer = new BrushingTimer(Notificator, Logger);
             timer.SetSettings(new BrushingSettings()
             {
                 CleaningSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(300), Repeats = 2 },
@@ -99,7 +101,7 @@ namespace NVs.Brusher.Wearable.Tests
         [Fact]
         public async Task StopOnCountdownZero()
         {
-            var timer = new BrushingTimer(Notificator).WithSettings(new BrushingSettings()
+            var timer = new BrushingTimer(Notificator, Logger).WithSettings(new BrushingSettings()
             {
                 CleaningSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(100), Repeats = 5}, 
                 HeartBitInterval = TimeSpan.FromMilliseconds(100)

@@ -18,7 +18,7 @@ namespace NVs.Brusher.Wearable.App
 
         void Initialize()
         {
-            var brushingTimer = new BrushingTimer(new VibroNotificator(Vibrator.Vibrators[0])).WithSettings(BrushingSettings.Default);
+            var brushingTimer = new BrushingTimer(new VibroNotificator(Vibrator.Vibrators[0]), null/*TBD*/).WithSettings(BrushingSettings.Default);
             
             Window.Instance.KeyEvent += OnBaseKeyEvent;
             

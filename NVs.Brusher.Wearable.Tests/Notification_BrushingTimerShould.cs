@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NVs.Brusher.Wearable.Core.Settings;
 using NVs.Brusher.Wearable.Core.Timer;
@@ -14,7 +15,7 @@ namespace NVs.Brusher.Wearable.Tests
         {
             var notificator = new Mock<INotificator>();
 
-            var timer = new BrushingTimer(notificator.Object).WithSettings(new BrushingSettings()
+            var timer = new BrushingTimer(notificator.Object, new Mock<ILogger<BrushingTimer>>().Object).WithSettings(new BrushingSettings()
             {
                 CleaningSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(100), Repeats = 1 },
                 HeartBitInterval = TimeSpan.FromMilliseconds(100)
@@ -40,7 +41,7 @@ namespace NVs.Brusher.Wearable.Tests
         {
             var notificator = new Mock<INotificator>();
 
-            var timer = new BrushingTimer(notificator.Object).WithSettings(new BrushingSettings()
+            var timer = new BrushingTimer(notificator.Object, new Mock<ILogger<BrushingTimer>>().Object).WithSettings(new BrushingSettings()
             {
                 SweepingSettings = { Enabled = sweepEnabled, Delay = TimeSpan.FromMilliseconds(100), Repeats = 1 },
                 CleaningSettings = { Enabled = cleanEnabled, Delay = TimeSpan.FromMilliseconds(100), Repeats = 1 },
@@ -60,7 +61,7 @@ namespace NVs.Brusher.Wearable.Tests
         {
             var notificator = new Mock<INotificator>();
 
-            var timer = new BrushingTimer(notificator.Object).WithSettings(new BrushingSettings()
+            var timer = new BrushingTimer(notificator.Object, new Mock<ILogger<BrushingTimer>>().Object).WithSettings(new BrushingSettings()
             {
                 CleaningSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(100), Repeats = 1 },
                 HeartBitInterval = TimeSpan.FromMilliseconds(100)
@@ -84,7 +85,7 @@ namespace NVs.Brusher.Wearable.Tests
 
             Exception exception = null;
 
-            var timer = new BrushingTimer(notificator.Object).WithSettings(new BrushingSettings()
+            var timer = new BrushingTimer(notificator.Object, new Mock<ILogger<BrushingTimer>>().Object).WithSettings(new BrushingSettings()
             {
                 SweepingSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(100), Repeats = 1 },
                 CleaningSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(100), Repeats = 1 },

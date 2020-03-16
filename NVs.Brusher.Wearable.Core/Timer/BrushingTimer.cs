@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Logging;
 using NVs.Brusher.Wearable.Core.Annotations;
 using NVs.Brusher.Wearable.Core.Settings;
 using NVs.Brusher.Wearable.Core.Timer.Actions;
@@ -11,6 +12,7 @@ namespace NVs.Brusher.Wearable.Core.Timer
     public sealed partial class BrushingTimer : INotifyPropertyChanged
     {
         private readonly INotificator notificator;
+        private readonly ILogger<BrushingTimer> logger;
         private readonly object thisLock = new object();
         private volatile bool stateChangeIsInProgress;
 
@@ -18,9 +20,12 @@ namespace NVs.Brusher.Wearable.Core.Timer
         private TimeSpan? remainingDuration;
         private System.Threading.Timer timer;
 
-        public BrushingTimer(INotificator notificator)
+        public BrushingTimer(INotificator notificator, ILogger<BrushingTimer> logger)
         {
             this.notificator = notificator;
+            this.logger = logger;
+
+            logger.LogDebug("Created");
         }
 
         public BrushingSettings Settings { get; private set; } = BrushingSettings.Default;
@@ -63,8 +68,10 @@ namespace NVs.Brusher.Wearable.Core.Timer
 
         public void Start()
         {
+            logger.LogTrace("Starting...");
             if (State == TimerState.Running)
             {
+                logger.LogWarning("Attempt made to start already running instance");
                 return;
             }
 
@@ -72,6 +79,7 @@ namespace NVs.Brusher.Wearable.Core.Timer
             {
                 if (stateChangeIsInProgress)
                 {
+                    logger.LogWarning("Multiple threads attempted to start timer. This one lose");
                     return;
                 }
 
@@ -80,6 +88,7 @@ namespace NVs.Brusher.Wearable.Core.Timer
 
             try
             {
+                logger.LogTrace($"Starting internal timer...");
                 State = TimerState.Running;
                 if (timer == null)
                 {
@@ -87,6 +96,7 @@ namespace NVs.Brusher.Wearable.Core.Timer
                 }
 
                 timer.Change(Settings.HeartBitInterval, Settings.HeartBitInterval);
+                logger.LogDebug("Started");
             }
             finally
             {
@@ -140,6 +150,7 @@ namespace NVs.Brusher.Wearable.Core.Timer
 
         private void InitializeTimer()
         {
+            logger.LogTrace("Initializing internal timer...");
             var context = new TickContext(this);
             var schedule = context.Actions;
 
@@ -165,6 +176,7 @@ namespace NVs.Brusher.Wearable.Core.Timer
             RemainingDuration = duration;
             timer = new System.Threading.Timer(OnTick, context, TimeSpan.FromMilliseconds(-1),
                 Settings.HeartBitInterval);
+            logger.LogDebug("Internal timer was initialized");
         }
 
         private void AddDelays(IntervalSettings intervalSettings, Stack<TimerAction> schedule)
