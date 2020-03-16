@@ -12,7 +12,7 @@ using Xunit.Sdk;
 
 namespace NVs.Brusher.Wearable.Tests
 {
-    public class Logging_BrushingTimerShould
+    public sealed class Logging_BrushingTimerShould
     {
         private static readonly INotificator Notificator = new Mock<INotificator>().Object;
 
@@ -80,7 +80,7 @@ namespace NVs.Brusher.Wearable.Tests
             AssertRecordExists(logger.Messages, LogLevel.Warning, "Attempt made to start already running instance");
         }
 
-        [Fact(Skip = "The test case is quite complex, hard to setup a reliable test")]
+        [Fact(Skip = "Unstable")]
         public void LogsWarningWhenStartRequestedFromDifferentThreadsSimultaneously()
         {
             var logger = new TestLogger();
@@ -137,6 +137,40 @@ namespace NVs.Brusher.Wearable.Tests
             AssertRecordExists(logger.Messages, LogLevel.Warning, "Attempt made to pause timer which is not running");
         }
 
+        [Fact]
+        public void LogsStop()
+        {
+            var logger = new TestLogger();
+
+            var timer = new BrushingTimer(Notificator, logger);
+            timer.Start();
+            timer.Stop();
+
+            AssertRecordExists(logger.Messages, LogLevel.Debug, "Stopped");
+        }
+
+        [Fact(Skip = "Unstable")]
+        public void LogsWarningWhenStopRequestedFromDifferentThreadsSimultaneously()
+        {
+            var logger = new TestLogger();
+
+            var barrier = new ManualResetEventSlim();
+
+            var timer = new BrushingTimer(Notificator, logger);
+            timer.Start();
+
+            var task = Enumerable.Repeat<Action>(() =>
+            {
+                barrier.Wait();
+                timer.Stop();
+            }, 3).Select(Task.Run).ToArray();
+
+            barrier.Set();
+            Task.WaitAll(task);
+
+            AssertRecordExists(logger.Messages, LogLevel.Warning, "Multiple threads attempted to stop timer. This one lose");
+        }
+        
         private void AssertRecordExists(IEnumerable<(LogLevel, string)> messages, LogLevel level, string message)
         {
             Assert.Contains(messages, (m) =>

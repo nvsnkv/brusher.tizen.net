@@ -119,12 +119,14 @@ namespace NVs.Brusher.Wearable.Core.Timer
 
         public void Stop()
         {
+            logger.LogTrace("Stopping...");
             if (timer != null)
             {
                 lock (thisLock)
                 {
                     if (stateChangeIsInProgress)
                     {
+                        logger.LogWarning("Multiple threads attempted to stop timer. This one lose");
                         return;
                     }
 
@@ -136,11 +138,13 @@ namespace NVs.Brusher.Wearable.Core.Timer
             {
                 if (timer != null)
                 {
+                    logger.LogTrace("Disposing internal timer...");
                     timer.Dispose();
                     RemainingDuration = null;
                 }
 
                 State = TimerState.Stopped;
+                logger.LogDebug("Stopped");
             }
             finally
             {
