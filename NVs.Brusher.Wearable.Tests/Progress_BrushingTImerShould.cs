@@ -108,7 +108,7 @@ namespace NVs.Brusher.Wearable.Tests
             });
 
             timer.Start();
-            var remaining = timer.RemainingDuration.Value.Add(TimeSpan.FromMilliseconds(100)); // HACK: it's not ending when I expect - there could be an issue inside a timer.
+            var remaining = timer.RemainingDuration.Value.Add(TimeSpan.FromMilliseconds(200)); // HACK: it's not ending when I expect - there could be an issue inside a timer.
                                                                                                      // at the same time, System.Threading.Timer is not too precise
             await Task.Delay(remaining);
 
