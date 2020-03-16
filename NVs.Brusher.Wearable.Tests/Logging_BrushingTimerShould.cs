@@ -126,6 +126,17 @@ namespace NVs.Brusher.Wearable.Tests
             AssertRecordExists(logger.Messages, LogLevel.Warning, "Attempt made to pause timer which is not running");
         }
 
+        [Fact]
+        public void LogsWarningWhenPauseCalledOnStoppedTimer()
+        {
+            var logger = new TestLogger();
+
+            var timer = new BrushingTimer(Notificator, logger);
+            timer.Pause();
+
+            AssertRecordExists(logger.Messages, LogLevel.Warning, "Attempt made to pause timer which is not running");
+        }
+
         private void AssertRecordExists(IEnumerable<(LogLevel, string)> messages, LogLevel level, string message)
         {
             Assert.Contains(messages, (m) =>
