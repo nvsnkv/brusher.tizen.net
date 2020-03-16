@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using NVs.Brusher.Wearable.Core.Settings;
 using Xunit;
 
@@ -14,74 +16,7 @@ namespace NVs.Brusher.Wearable.Tests
             Assert.True(Equals(left, right));
         }
 
-        [Fact]
-        public void BeDifferentIfEnabledDiffers()
-        {
-            var (left, right) = GetNewIntervalSettingsInstances();
-            right.Enabled = !left.Enabled;
-
-            Assert.False(left.Enabled.Equals(right.Enabled));
-            Assert.False(Equals(left, right));
-
-        }
-
-        [Fact]
-        public void BeDifferentIfDelayDiffers()
-        {
-            var (left, right) = GetNewIntervalSettingsInstances();
-            right.Duration = 2 * left.Duration;
-
-            Assert.False(left.Duration.Equals(right.Duration));
-            Assert.False(Equals(left, right));
-        }
-
-        [Fact]
-        public void BeDifferentIfRepeatsDiffers()
-        {
-            var (left, right) = GetNewIntervalSettingsInstances();
-            right.Repeats = 2 * left.Repeats;
-
-            Assert.False(left.Repeats.Equals(right.Repeats));
-            Assert.False(Equals(left, right));
-        }
-
-        [Fact]
-        public void BeDifferentIfRepeatsAndDelayDiffers()
-        {
-            var (left, right) = GetNewIntervalSettingsInstances();
-            right.Repeats = 2 * left.Repeats;
-            right.Duration = 2 * left.Duration;
-
-            Assert.False(left.Duration.Equals(right.Duration));
-            Assert.False(left.Repeats.Equals(right.Repeats));
-            Assert.False(Equals(left, right));
-        }
-
-        [Fact]
-        public void BeDifferentIfRepeatsAndEnabledDiffers()
-        {
-            var (left, right) = GetNewIntervalSettingsInstances();
-            right.Repeats = 2 * left.Repeats;
-            right.Enabled = !left.Enabled;
-
-            Assert.False(left.Enabled.Equals(right.Enabled));
-            Assert.False(left.Repeats.Equals(right.Repeats));
-            Assert.False(Equals(left, right));
-        }
-
-        [Fact]
-        public void BeDifferentIfEverythingDiffers()
-        {
-            var (left, right) = GetNewIntervalSettingsInstances();
-            right.Repeats = 2 * left.Repeats;
-            right.Enabled = !left.Enabled;
-            right.Duration = 2 * left.Duration;
-
-            Assert.False(left.Enabled.Equals(right.Enabled));
-            Assert.False(left.Duration.Equals(right.Duration));
-            Assert.False(left.Repeats.Equals(right.Repeats));
-            Assert.False(Equals(left, right));
-        }
+       
 
         [Fact]
         public void ReturnSameHashCodeIfValuesAreEqual()
@@ -135,12 +70,22 @@ namespace NVs.Brusher.Wearable.Tests
         {
             var @new = new StageSettings();
 
-            var test = new StageSettings()
+            var _ = new StageSettings()
             {
                 Enabled = @new.Enabled,
                 Duration = @new.Duration,
                 Repeats = @new.Repeats
             };
+        }
+
+        [Theory]
+        [ClassData(typeof(DifferentIntervalDataGenerator))]
+        public void BeDifferentIfValuesAreDifferent(bool enabledDiffers, bool durationDiffers, bool repeatsDiffers)
+        {
+            var (left, right) = GetNewIntervalSettingsInstances();
+            if (enabledDiffers) left.Enabled = !right.Enabled;
+            if (durationDiffers) left.Duration = 2 * right.Duration;
+            if (repeatsDiffers) left.Repeats = 2 * right.Repeats;
         }
 
         private (StageSettings, StageSettings) GetNewIntervalSettingsInstances()
@@ -157,6 +102,56 @@ namespace NVs.Brusher.Wearable.Tests
                 Duration = TimeSpan.FromMinutes(1),
                 Repeats = 1
             });
+        }
+    }
+
+    public sealed class DifferentIntervalDataGenerator : IEnumerable<object[]>
+    {
+        private class DiffersGenerator : IEnumerator<object[]>
+        {
+            private int current = 0;
+
+            public bool MoveNext()
+            {
+                if (current == 8) { return false; }
+
+                current++;
+                Current = new object[]
+                {
+                    (current & 1) == 1, (current & 2) == 2, (current & 4) == 4
+                };
+
+                if (!((bool)Current[0] || (bool)Current[1] || (bool)Current[2]))
+                {
+                    return MoveNext();
+                }
+
+                return true;
+
+            }
+
+            public void Reset()
+            {
+                current = 0;
+            }
+
+            public object[] Current { get; private set; } = { true, false, false, false, false };
+
+            object IEnumerator.Current => Current;
+
+            public void Dispose()
+            {
+            }
+        }
+
+        public IEnumerator<object[]> GetEnumerator()
+        {
+            return new DiffersGenerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using NVs.Brusher.Wearable.Core.Settings;
 using Xunit;
@@ -10,146 +12,11 @@ namespace NVs.Brusher.Wearable.Tests
         [Fact]
         public void BeEqualIfSetupIsEqual()
         {
-            var (left, right) = GetNewStandardBrushingSettingsInstances();
+            var (left, right) = DifferentBrushingSettingsGenerator.GetNewStandardBrushingSettingsInstances();
 
             var result = left.Equals(right);
             Assert.True(result);
         }
-
-        [Fact]
-        public void BeDifferentIfSweepingSettingsAreDifferent()
-        {
-            var (left, right) = GetNewStandardBrushingSettingsInstances();
-            right.SweepingSettings.Enabled = !left.SweepingSettings.Enabled;
-
-            Assert.False(Equals(right.SweepingSettings, left.SweepingSettings));
-            Assert.False(Equals(left, right));
-        }
-
-        [Fact]
-        public void BeDifferentIfCleaningSettingsAreDifferent()
-        {
-            var (left, right) = GetNewStandardBrushingSettingsInstances();
-            right.CleaningSettings.Duration = left.CleaningSettings.Duration * 2;
-
-            Assert.False(Equals(right.CleaningSettings, left.CleaningSettings));
-            Assert.False(Equals(left, right));
-        }
-
-        [Fact]
-        public void BeDifferentIfPolishingSettingsAreDifferent()
-        {
-            var (left, right) = GetNewStandardBrushingSettingsInstances();
-            right.PolishingSettings.Repeats = left.PolishingSettings.Repeats - 2;
-
-            Assert.False(Equals(right.PolishingSettings, left.PolishingSettings));
-            Assert.False(Equals(left, right));
-        }
-
-        [Fact]
-        public void BeDifferentIfHeartBitsAreDifferent()
-        {
-            var (left, right) = GetNewStandardBrushingSettingsInstances();
-            right.HeartBitInterval = 3 * left.HeartBitInterval;
-
-            Assert.False(Equals(right.HeartBitInterval, left.HeartBitInterval));
-            Assert.False(Equals(left, right));
-        }
-
-        [Fact]
-        public void BeDifferentIfPolishingAndSweepingSettingsAreDifferent()
-        {
-            var (left, right) = GetNewStandardBrushingSettingsInstances();
-            right.PolishingSettings.Repeats = left.PolishingSettings.Repeats - 2;
-            right.SweepingSettings.Enabled = !left.SweepingSettings.Enabled;
-
-            Assert.False(Equals(right.SweepingSettings, left.SweepingSettings));
-            Assert.False(Equals(right.PolishingSettings, left.PolishingSettings));
-            Assert.False(Equals(left, right));
-        }
-
-        [Fact]
-        public void BeDifferentIfPolishingAndCleaningSettingsAreDifferent()
-        {
-            var (left, right) = GetNewStandardBrushingSettingsInstances();
-            right.PolishingSettings.Repeats = left.PolishingSettings.Repeats - 2;
-            right.CleaningSettings.Enabled = !left.CleaningSettings.Enabled;
-
-            Assert.False(Equals(right.CleaningSettings, left.CleaningSettings));
-            Assert.False(Equals(right.PolishingSettings, left.PolishingSettings));
-            Assert.False(Equals(left, right));
-        }
-
-        [Fact]
-        public void BeDifferentIfPolishingAndHeartBitAreDifferent()
-        {
-            var (left, right) = GetNewStandardBrushingSettingsInstances();
-            right.PolishingSettings.Repeats = left.PolishingSettings.Repeats - 2;
-            right.HeartBitInterval = 3 * left.HeartBitInterval;
-
-            Assert.False(Equals(right.HeartBitInterval, left.HeartBitInterval));
-            Assert.False(Equals(right.PolishingSettings, left.PolishingSettings));
-            Assert.False(Equals(left, right));
-        }
-
-        [Fact]
-        public void BeDifferentIfPolishingAndSweepingSettingsAndHeartBitAreDifferent()
-        {
-            var (left, right) = GetNewStandardBrushingSettingsInstances();
-            right.PolishingSettings.Repeats = left.PolishingSettings.Repeats - 2;
-            right.SweepingSettings.Enabled = !left.SweepingSettings.Enabled;
-            right.HeartBitInterval = 3 * left.HeartBitInterval;
-
-            Assert.False(Equals(right.SweepingSettings, left.SweepingSettings));
-            Assert.False(Equals(right.PolishingSettings, left.PolishingSettings));
-            Assert.False(Equals(right.HeartBitInterval, left.HeartBitInterval));
-            Assert.False(Equals(left, right));
-        }
-
-        [Fact]
-        public void BeDifferentIfPolishingAndCleaningSettingsAndHeartBitAreDifferent()
-        {
-            var (left, right) = GetNewStandardBrushingSettingsInstances();
-            right.PolishingSettings.Repeats = left.PolishingSettings.Repeats - 2;
-            right.CleaningSettings.Enabled = !left.CleaningSettings.Enabled;
-            right.HeartBitInterval = 3 * left.HeartBitInterval;
-
-            Assert.False(Equals(right.CleaningSettings, left.CleaningSettings));
-            Assert.False(Equals(right.PolishingSettings, left.PolishingSettings));
-            Assert.False(Equals(right.HeartBitInterval, left.HeartBitInterval));
-            Assert.False(Equals(left, right));
-        }
-
-        [Fact]
-        public void BeDifferentIfEverythingExceptHeartBitIsDifferent()
-        {
-            var (left, right) = GetNewStandardBrushingSettingsInstances();
-            right.PolishingSettings.Repeats = left.PolishingSettings.Repeats - 2;
-            right.CleaningSettings.Enabled = !left.CleaningSettings.Enabled;
-            right.SweepingSettings.Duration = 2 * left.SweepingSettings.Duration;
-
-            Assert.False(Equals(right.CleaningSettings, left.CleaningSettings));
-            Assert.False(Equals(right.PolishingSettings, left.PolishingSettings));
-            Assert.False(Equals(right.SweepingSettings, left.SweepingSettings));
-            Assert.False(Equals(left, right));
-        }
-
-        [Fact]
-        public void BeDifferentIfEverythingIsDifferent()
-        {
-            var (left, right) = GetNewStandardBrushingSettingsInstances();
-            right.PolishingSettings.Repeats = left.PolishingSettings.Repeats - 2;
-            right.CleaningSettings.Enabled = !left.CleaningSettings.Enabled;
-            right.SweepingSettings.Duration = 2 * left.SweepingSettings.Duration;
-            right.HeartBitInterval = 3 * left.HeartBitInterval;
-
-            Assert.False(Equals(right.CleaningSettings, left.CleaningSettings));
-            Assert.False(Equals(right.PolishingSettings, left.PolishingSettings));
-            Assert.False(Equals(right.SweepingSettings, left.SweepingSettings));
-            Assert.False(Equals(right.HeartBitInterval, left.HeartBitInterval));
-            Assert.False(Equals(left, right));
-        }
-
 
         [Fact]
         public void NotAcceptZeroHeartBitIntervals()
@@ -164,7 +31,85 @@ namespace NVs.Brusher.Wearable.Tests
             });
         }
 
-        private (BrushingSettings, BrushingSettings) GetNewStandardBrushingSettingsInstances()
+        [Fact]
+        public void NotAcceptNegativeDelays()
+        {
+            Assert.Throws<ArgumentException>(() =>
+            {
+                // ReSharper disable once ObjectCreationAsStatement
+                new BrushingSettings()
+                {
+                    Delay = TimeSpan.FromMilliseconds(-1)
+                };
+            });
+        }
+
+        [Theory]
+        [ClassData(typeof(DifferentBrushingSettingsGenerator))]
+        public void BeDifferentIfDataDiffers(bool delayDiffers, bool heartBitDiffers, bool sweepDiffers, bool cleanDiffers, bool polishDiffers)
+        {
+            var (left, right) = DifferentBrushingSettingsGenerator.GetNewStandardBrushingSettingsInstances();
+
+            if (delayDiffers) right.Delay = 2 * left.Delay;
+            if (heartBitDiffers) right.HeartBitInterval = 2 * left.HeartBitInterval;
+            if (sweepDiffers) right.SweepingSettings.Enabled = !left.SweepingSettings.Enabled;
+            if (cleanDiffers) right.CleaningSettings.Enabled = !left.CleaningSettings.Enabled;
+            if (polishDiffers) right.PolishingSettings.Enabled = !left.PolishingSettings.Enabled;
+
+            Assert.False(left.Equals(right));
+        }
+    }
+
+    public sealed class DifferentBrushingSettingsGenerator : IEnumerable<object[]>
+    {
+        private class DiffersGenerator : IEnumerator<object[]>
+        {
+            private int current = 0;
+
+            public bool MoveNext()
+            {
+                if (current == 32) { return false; }
+
+                current++;
+                Current = new object[]
+                {
+                    (current & 1) == 1, (current & 2) == 2, (current & 4) == 4, (current & 8) == 8, (current & 16) == 16
+                };
+
+                if (!((bool)Current[0] || (bool)Current[1] || (bool)Current[2] || (bool)Current[3] || (bool)Current[4]))
+                {
+                    return MoveNext();
+                }
+
+                return true;
+
+            }
+
+            public void Reset()
+            {
+                current = 0;
+            }
+
+            public object[] Current { get; private set; } = { true, false, false, false, false };
+
+            object IEnumerator.Current => Current;
+
+            public void Dispose()
+            {
+            }
+        }
+
+        public IEnumerator<object[]> GetEnumerator()
+        {
+            return new DiffersGenerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public static (BrushingSettings, BrushingSettings) GetNewStandardBrushingSettingsInstances()
         {
             return (new BrushingSettings()
             {
@@ -189,7 +134,8 @@ namespace NVs.Brusher.Wearable.Tests
                     Repeats = 3
                 },
 
-                HeartBitInterval = TimeSpan.FromMilliseconds(1000)
+                HeartBitInterval = TimeSpan.FromMilliseconds(1000),
+                Delay = TimeSpan.FromMilliseconds(300)
 
             }, new BrushingSettings()
             {
@@ -214,7 +160,8 @@ namespace NVs.Brusher.Wearable.Tests
                     Repeats = 3
                 },
 
-                HeartBitInterval = TimeSpan.FromMilliseconds(1000)
+                HeartBitInterval = TimeSpan.FromMilliseconds(1000),
+                Delay =  TimeSpan.FromMilliseconds(300)
             });
         }
     }

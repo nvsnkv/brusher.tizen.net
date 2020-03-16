@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
+using System.Reflection;
 using NVs.Brusher.Wearable.Core.Timer;
 
 namespace NVs.Brusher.Wearable.Core.Settings
@@ -30,7 +32,17 @@ namespace NVs.Brusher.Wearable.Core.Settings
                 heartBitInterval = value;
             }
         }
-        
+
+        public TimeSpan Delay
+        {
+            get => delay;
+            set
+            {
+                if (value < TimeSpan.Zero) throw  new ArgumentException("Delay should be positive", nameof(Delay));
+                delay = value;
+            }
+        }
+
         public static readonly BrushingSettings Default = new BrushingSettings()
         {
             SweepingSettings =
@@ -56,10 +68,11 @@ namespace NVs.Brusher.Wearable.Core.Settings
         };
 
         private TimeSpan heartBitInterval;
+        private TimeSpan delay;
 
         private bool Equals(BrushingSettings other)
         {
-            return heartBitInterval.Equals(other.heartBitInterval) && Equals(SweepingSettings, other.SweepingSettings) && Equals(CleaningSettings, other.CleaningSettings) && Equals(PolishingSettings, other.PolishingSettings);
+            return heartBitInterval.Equals(other.heartBitInterval) && delay.Equals(other.delay) && Equals(SweepingSettings, other.SweepingSettings) && Equals(CleaningSettings, other.CleaningSettings) && Equals(PolishingSettings, other.PolishingSettings);
         }
 
         public override bool Equals(object obj)
@@ -72,6 +85,7 @@ namespace NVs.Brusher.Wearable.Core.Settings
             unchecked
             {
                 var hashCode = heartBitInterval.GetHashCode();
+                hashCode = (hashCode * 397) ^ delay.GetHashCode();
                 hashCode = (hashCode * 397) ^ (SweepingSettings != null ? SweepingSettings.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (CleaningSettings != null ? CleaningSettings.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (PolishingSettings != null ? PolishingSettings.GetHashCode() : 0);
