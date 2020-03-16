@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using NVs.Brusher.Wearable.Core.Timer.Actions;
 
 namespace NVs.Brusher.Wearable.Core.Timer
@@ -22,6 +23,8 @@ namespace NVs.Brusher.Wearable.Core.Timer
             public bool TimerRunning => timer.State == TimerState.Running;
 
             public TimeSpan HeartbBitInterval => timer.Settings.HeartBitInterval;
+
+            public ILogger Logger => timer.logger;
 
             public void DecreaseRemaining()
             {
@@ -60,19 +63,21 @@ namespace NVs.Brusher.Wearable.Core.Timer
             {
                 return;
             }
-
-
+            
+            context.Logger.LogTrace("HeartBit payload started...");
             try
             {
                 while (!context.CurrentDelay.HasValue)
                 {
                     if (!context.TimerRunning)
                     {
+                        context.Logger.LogDebug("HeartBit occured for paused timer.No action was performed");
                         return;
                     }
 
                     if (context.Actions.Count == 0)
                     {
+                        context.Logger.LogDebug("Schedule ended, stopping the timer");
                         context.Stop();
                         return;
                     }
@@ -105,6 +110,7 @@ namespace NVs.Brusher.Wearable.Core.Timer
                 {
                     context.CurrentDelay = null;
                 }
+                context.Logger.LogDebug("HeartBit payload executed");
             }
             catch (Exception e)
             {

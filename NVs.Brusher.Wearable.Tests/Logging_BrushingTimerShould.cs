@@ -6,7 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NVs.Brusher.Wearable.Core.Settings;
 using NVs.Brusher.Wearable.Core.Timer;
+using Tizen;
 using Xunit;
 using Xunit.Sdk;
 
@@ -170,7 +172,62 @@ namespace NVs.Brusher.Wearable.Tests
 
             AssertRecordExists(logger.Messages, LogLevel.Warning, "Multiple threads attempted to stop timer. This one lose");
         }
-        
+
+        [Fact]
+        public async Task LogsIfHeartBitHappenedForPausedTimer()
+        {
+            var logger = new TestLogger();
+
+            var timer = new BrushingTimer(Notificator, logger).WithSettings(new BrushingSettings(){CleaningSettings = { Delay = TimeSpan.FromMilliseconds(300), Enabled = true, Repeats = 1}, HeartBitInterval = TimeSpan.FromMilliseconds(100)});
+            timer.Start();
+            timer.Pause();
+
+            await Task.Delay(timer.Settings.HeartBitInterval * 5);
+            timer.Stop();
+            AssertRecordExists(logger.Messages, LogLevel.Debug, "HeartBit occured for paused timer.No action was performed");
+        }
+
+        [Fact]
+        public async Task LogsWhenScheduleEnds()
+        {
+            var logger = new TestLogger();
+
+            var timer = new BrushingTimer(Notificator, logger).WithSettings(new BrushingSettings() { CleaningSettings = { Delay = TimeSpan.FromMilliseconds(300), Enabled = true, Repeats = 1 }, HeartBitInterval = TimeSpan.FromMilliseconds(100) });
+            timer.Start();
+
+            await Task.Delay(timer.RemainingDuration.Value + 2 * timer.Settings.HeartBitInterval);
+            AssertRecordExists(logger.Messages, LogLevel.Debug, "Schedule ended, stopping the timer");
+        }
+
+        [Fact]
+        public async Task LogsWhenHeartbitPayloadGetsExecutedOnPausedTimer()
+        {
+            var logger = new TestLogger();
+
+            var timer = new BrushingTimer(Notificator, logger).WithSettings(new BrushingSettings() { CleaningSettings = { Delay = TimeSpan.FromMilliseconds(300), Enabled = true, Repeats = 1 }, HeartBitInterval = TimeSpan.FromMilliseconds(100) });
+            timer.Start();
+            timer.Pause();
+
+            await Task.Delay(timer.RemainingDuration.Value);
+            timer.Stop();
+
+            AssertRecordExists(logger.Messages, LogLevel.Debug, "HeartBit occured for paused timer.No action was performed");
+        }
+
+        [Fact]
+        public async Task LogsWhenHeartBitPayloadGetsExecuted()
+        {
+            var logger = new TestLogger();
+
+            var timer = new BrushingTimer(Notificator, logger).WithSettings(new BrushingSettings() { CleaningSettings = { Delay = TimeSpan.FromMilliseconds(300), Enabled = true, Repeats = 1 }, HeartBitInterval = TimeSpan.FromMilliseconds(100) });
+            timer.Start();
+
+            await Task.Delay(2 * timer.Settings.HeartBitInterval);
+            timer.Stop();
+
+            AssertRecordExists(logger.Messages, LogLevel.Debug, "HeartBit payload executed");
+        }
+
         private void AssertRecordExists(IEnumerable<(LogLevel, string)> messages, LogLevel level, string message)
         {
             Assert.Contains(messages, (m) =>
