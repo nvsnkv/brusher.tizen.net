@@ -1,7 +1,10 @@
 ﻿using System;
 using NVs.Brusher.Wearable.App.Controllers;
 using NVs.Brusher.Wearable.App.Views;
+using NVs.Brusher.Wearable.Core.Settings;
+using NVs.Brusher.Wearable.Core.Timer;
 using Tizen.NUI;
+using Tizen.System;
 
 namespace NVs.Brusher.Wearable.App
 {
@@ -15,10 +18,12 @@ namespace NVs.Brusher.Wearable.App
 
         void Initialize()
         {
+            var brushingTimer = new BrushingTimer(new VibroNotificator(Vibrator.Vibrators[0])).WithSettings(BrushingSettings.Default);
+            
             Window.Instance.KeyEvent += OnBaseKeyEvent;
             
-            var timerView = new TimerView(Window.Instance.GetDefaultLayer(), DirectoryInfo);
-            var timerViewController = new TimerViewController(timerView);
+            var timerView = new TimerView(Window.Instance.GetDefaultLayer(), DirectoryInfo, brushingTimer);
+            var timerViewController = new TimerViewController(timerView, brushingTimer);
 
             this.KeyEvent += timerViewController.HandleKeyEvent;
             this.KeyEvent += OnKeyEvent;

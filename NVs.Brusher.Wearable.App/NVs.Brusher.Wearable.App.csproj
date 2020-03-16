@@ -16,5 +16,9 @@
     <Folder Include="lib\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\NVs.Brusher.Wearable.Core\NVs.Brusher.Wearable.Core.csproj" />
+  </ItemGroup>
+
 </Project>
 
