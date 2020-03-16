@@ -1,5 +1,7 @@
 ﻿using System;
+using Microsoft.Extensions.Logging;
 using NVs.Brusher.Wearable.App.Controllers;
+using NVs.Brusher.Wearable.App.Logging;
 using NVs.Brusher.Wearable.App.Views;
 using NVs.Brusher.Wearable.Core.Settings;
 using NVs.Brusher.Wearable.Core.Timer;
@@ -10,18 +12,37 @@ namespace NVs.Brusher.Wearable.App
 {
     sealed class BrusherApp : NUIApplication
     {
+        private ILogger appLogger;
         protected override void OnCreate()
         {
-            base.OnCreate();
-            Initialize();
+            appLogger = new LogWrapper<BrusherApp>(LogLevel.Information);
+            try
+            {
+                base.OnCreate();
+                Initialize();
+            }
+            catch (Exception e)
+            {
+                appLogger.LogCritical(e, "Uhnandled exception in OnCreate, terminating applicaiton");
+                throw;
+            }
         }
 
         void Initialize()
         {
-            var brushingTimer = new BrushingTimer(new VibroNotificator(Vibrator.Vibrators[0]), null/*TBD*/).WithSettings(BrushingSettings.Default);
-            
+            var vibroLogger = new LogWrapper<VibroNotificator>(LogLevel.Debug);
+            var timerLogger = new LogWrapper<BrushingTimer>(LogLevel.Debug);
+
+            var brushingTimer =
+                new BrushingTimer(new VibroNotificator(Vibrator.Vibrators[0], vibroLogger), timerLogger)
+                    .WithSettings(BrushingSettings.Default);
+            brushingTimer.AsyncExceptionRaised += (o, e) =>
+            {
+                timerLogger.LogError(e.Exception, "Asynchronous exception happened");
+            };
+
             Window.Instance.KeyEvent += OnBaseKeyEvent;
-            
+
             var timerView = new TimerView(Window.Instance.GetDefaultLayer(), DirectoryInfo, brushingTimer);
             var timerViewController = new TimerViewController(timerView, brushingTimer);
 
@@ -38,11 +59,19 @@ namespace NVs.Brusher.Wearable.App
 
         private void OnKeyEvent(object sender, KeyEventArgs e)
         {
-            if (e.Handled) return;
-
-            if (e.Key.State == Key.StateType.Down && (e.Key.KeyPressedName == "XF86Back" || e.Key.KeyPressedName == "Escape"))
+            try
             {
-                Exit();
+                if (e.Handled) return;
+
+                if (e.Key.State == Key.StateType.Down && (e.Key.KeyPressedName == "XF86Back" || e.Key.KeyPressedName == "Escape"))
+                {
+                    appLogger.LogInformation("Escape key pressed, exiting...");
+                    Exit();
+                }
+            }
+            catch (Exception ex)
+            {
+                appLogger.LogError(ex, "Error occured while processing KeyEvent");
             }
         }
 
@@ -54,7 +83,14 @@ namespace NVs.Brusher.Wearable.App
 
         private void RaiseKeyEvent(KeyEventArgs e)
         {
-            KeyEvent?.Invoke(this, e);
+            try
+            {
+                KeyEvent?.Invoke(this, e);
+            }
+            catch (Exception ex)
+            {
+                appLogger.LogError(ex, "Error occured while raising KeyEvent");
+            }
         }
     }
 }
