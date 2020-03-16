@@ -186,9 +186,9 @@ namespace NVs.Brusher.Wearable.Core.Timer
             logger.LogDebug("Internal timer was initialized");
         }
 
-        private void AddDelays(IntervalSettings intervalSettings, Stack<TimerAction> schedule)
+        private void AddDelays(StageSettings stageSettings, Stack<TimerAction> schedule)
         {
-            if (!intervalSettings.Enabled)
+            if (!stageSettings.Enabled)
             {
                 return;
             }
@@ -198,9 +198,9 @@ namespace NVs.Brusher.Wearable.Core.Timer
                 schedule.Push(new NotifyStageChangedTimerAction());
             }
 
-            for (var i = intervalSettings.Repeats - 1; i >= 0 ; i--)
+            for (var i = stageSettings.Repeats - 1; i >= 0 ; i--)
             {
-                schedule.Push(new CountdownTimerAction(intervalSettings.Delay));
+                schedule.Push(new CountdownTimerAction(stageSettings.Delay));
             }
 
         }

@@ -4,7 +4,7 @@ using Xunit;
 
 namespace NVs.Brusher.Wearable.Tests
 {
-    public sealed class IntervalSettingsShould
+    public sealed class StageSettingsShould
     {
         [Fact]
         public void BeEqualIfTheyAreEqual()
@@ -96,7 +96,7 @@ namespace NVs.Brusher.Wearable.Tests
             Assert.Throws<ArgumentException>(() =>
             {
                 // ReSharper disable once ObjectCreationAsStatement
-                new IntervalSettings()
+                new StageSettings()
                 {
                     Repeats = -1
                 };
@@ -109,7 +109,7 @@ namespace NVs.Brusher.Wearable.Tests
             Assert.Throws<ArgumentException>(() =>
             {
                 // ReSharper disable once ObjectCreationAsStatement
-                new IntervalSettings()
+                new StageSettings()
                 {
                     Repeats = 0
                 };
@@ -123,7 +123,7 @@ namespace NVs.Brusher.Wearable.Tests
             Assert.Throws<ArgumentException>(() =>
             {
                 // ReSharper disable once ObjectCreationAsStatement
-                new IntervalSettings()
+                new StageSettings()
                 {
                     Delay = TimeSpan.Zero
                 };
@@ -133,9 +133,9 @@ namespace NVs.Brusher.Wearable.Tests
         [Fact]
         public void BeValidByDefault()
         {
-            var @new = new IntervalSettings();
+            var @new = new StageSettings();
 
-            var test = new IntervalSettings()
+            var test = new StageSettings()
             {
                 Enabled = @new.Enabled,
                 Delay = @new.Delay,
@@ -143,15 +143,15 @@ namespace NVs.Brusher.Wearable.Tests
             };
         }
 
-        private (IntervalSettings, IntervalSettings) GetNewIntervalSettingsInstances()
+        private (StageSettings, StageSettings) GetNewIntervalSettingsInstances()
         {
-            return (new IntervalSettings()
+            return (new StageSettings()
             {
                 Enabled = true,
                 Delay = TimeSpan.FromMinutes(1),
                 Repeats = 1
             },
-            new IntervalSettings()
+            new StageSettings()
             {
                 Enabled = true,
                 Delay = TimeSpan.FromMinutes(1),

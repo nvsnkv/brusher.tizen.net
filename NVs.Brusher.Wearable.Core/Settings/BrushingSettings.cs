@@ -8,17 +8,17 @@ namespace NVs.Brusher.Wearable.Core.Settings
     {
         public BrushingSettings()
         {
-            SweepingSettings = new IntervalSettings();
-            CleaningSettings = new IntervalSettings();
-            PolishingSettings = new IntervalSettings();
+            SweepingSettings = new StageSettings();
+            CleaningSettings = new StageSettings();
+            PolishingSettings = new StageSettings();
             HeartBitInterval = TimeSpan.FromMilliseconds(1000);
         }
 
-        public IntervalSettings SweepingSettings { get; private set; }
+        public StageSettings SweepingSettings { get; private set; }
 
-        public IntervalSettings CleaningSettings { get; private set; }
+        public StageSettings CleaningSettings { get; private set; }
 
-        public IntervalSettings PolishingSettings { get; private set; }
+        public StageSettings PolishingSettings { get; private set; }
 
         public TimeSpan HeartBitInterval
         {

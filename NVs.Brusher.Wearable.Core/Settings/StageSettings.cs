@@ -2,25 +2,25 @@
 
 namespace NVs.Brusher.Wearable.Core.Settings
 {
-    public sealed class IntervalSettings
+    public sealed class StageSettings
     {
         private int repeats;
         private TimeSpan delay;
 
-        public IntervalSettings()
+        public StageSettings()
         {
             delay = TimeSpan.FromMilliseconds(1000);
             repeats = 1;
         }
 
-        private bool Equals(IntervalSettings other)
+        private bool Equals(StageSettings other)
         {
             return Enabled == other.Enabled && Delay.Equals(other.Delay) && Repeats == other.Repeats;
         }
 
         public override bool Equals(object obj)
         {
-            return ReferenceEquals(this, obj) || obj is IntervalSettings other && Equals(other);
+            return ReferenceEquals(this, obj) || obj is StageSettings other && Equals(other);
         }
 
         public override int GetHashCode()
