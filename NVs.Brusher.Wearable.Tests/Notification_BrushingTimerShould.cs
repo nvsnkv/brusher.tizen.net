@@ -17,7 +17,7 @@ namespace NVs.Brusher.Wearable.Tests
 
             var timer = new BrushingTimer(notificator.Object, new Mock<ILogger<BrushingTimer>>().Object).WithSettings(new BrushingSettings()
             {
-                CleaningSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(100), Repeats = 1 },
+                CleaningSettings = { Enabled = true, Duration = TimeSpan.FromMilliseconds(100), Repeats = 1 },
                 HeartBitInterval = TimeSpan.FromMilliseconds(100)
             });
 
@@ -43,9 +43,9 @@ namespace NVs.Brusher.Wearable.Tests
 
             var timer = new BrushingTimer(notificator.Object, new Mock<ILogger<BrushingTimer>>().Object).WithSettings(new BrushingSettings()
             {
-                SweepingSettings = { Enabled = sweepEnabled, Delay = TimeSpan.FromMilliseconds(100), Repeats = 1 },
-                CleaningSettings = { Enabled = cleanEnabled, Delay = TimeSpan.FromMilliseconds(100), Repeats = 1 },
-                PolishingSettings = { Enabled = polishEnabled, Delay = TimeSpan.FromMilliseconds(100), Repeats = 1 },
+                SweepingSettings = { Enabled = sweepEnabled, Duration = TimeSpan.FromMilliseconds(100), Repeats = 1 },
+                CleaningSettings = { Enabled = cleanEnabled, Duration = TimeSpan.FromMilliseconds(100), Repeats = 1 },
+                PolishingSettings = { Enabled = polishEnabled, Duration = TimeSpan.FromMilliseconds(100), Repeats = 1 },
                 HeartBitInterval = TimeSpan.FromMilliseconds(100)
             });
 
@@ -63,7 +63,7 @@ namespace NVs.Brusher.Wearable.Tests
 
             var timer = new BrushingTimer(notificator.Object, new Mock<ILogger<BrushingTimer>>().Object).WithSettings(new BrushingSettings()
             {
-                CleaningSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(100), Repeats = 1 },
+                CleaningSettings = { Enabled = true, Duration = TimeSpan.FromMilliseconds(100), Repeats = 1 },
                 HeartBitInterval = TimeSpan.FromMilliseconds(100)
             });
 
@@ -87,8 +87,8 @@ namespace NVs.Brusher.Wearable.Tests
 
             var timer = new BrushingTimer(notificator.Object, new Mock<ILogger<BrushingTimer>>().Object).WithSettings(new BrushingSettings()
             {
-                SweepingSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(100), Repeats = 1 },
-                CleaningSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(100), Repeats = 1 },
+                SweepingSettings = { Enabled = true, Duration = TimeSpan.FromMilliseconds(100), Repeats = 1 },
+                CleaningSettings = { Enabled = true, Duration = TimeSpan.FromMilliseconds(100), Repeats = 1 },
                 HeartBitInterval = TimeSpan.FromMilliseconds(100)
             });
 

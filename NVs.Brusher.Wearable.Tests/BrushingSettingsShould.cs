@@ -30,7 +30,7 @@ namespace NVs.Brusher.Wearable.Tests
         public void BeDifferentIfCleaningSettingsAreDifferent()
         {
             var (left, right) = GetNewStandardBrushingSettingsInstances();
-            right.CleaningSettings.Delay = left.CleaningSettings.Delay * 2;
+            right.CleaningSettings.Duration = left.CleaningSettings.Duration * 2;
 
             Assert.False(Equals(right.CleaningSettings, left.CleaningSettings));
             Assert.False(Equals(left, right));
@@ -126,7 +126,7 @@ namespace NVs.Brusher.Wearable.Tests
             var (left, right) = GetNewStandardBrushingSettingsInstances();
             right.PolishingSettings.Repeats = left.PolishingSettings.Repeats - 2;
             right.CleaningSettings.Enabled = !left.CleaningSettings.Enabled;
-            right.SweepingSettings.Delay = 2 * left.SweepingSettings.Delay;
+            right.SweepingSettings.Duration = 2 * left.SweepingSettings.Duration;
 
             Assert.False(Equals(right.CleaningSettings, left.CleaningSettings));
             Assert.False(Equals(right.PolishingSettings, left.PolishingSettings));
@@ -140,7 +140,7 @@ namespace NVs.Brusher.Wearable.Tests
             var (left, right) = GetNewStandardBrushingSettingsInstances();
             right.PolishingSettings.Repeats = left.PolishingSettings.Repeats - 2;
             right.CleaningSettings.Enabled = !left.CleaningSettings.Enabled;
-            right.SweepingSettings.Delay = 2 * left.SweepingSettings.Delay;
+            right.SweepingSettings.Duration = 2 * left.SweepingSettings.Duration;
             right.HeartBitInterval = 3 * left.HeartBitInterval;
 
             Assert.False(Equals(right.CleaningSettings, left.CleaningSettings));
@@ -171,21 +171,21 @@ namespace NVs.Brusher.Wearable.Tests
                 SweepingSettings =
                 {
                     Enabled = true,
-                    Delay = TimeSpan.FromMilliseconds(5000),
+                    Duration = TimeSpan.FromMilliseconds(5000),
                     Repeats = 12
                 },
 
                 CleaningSettings =
                 {
                     Enabled = true,
-                    Delay = TimeSpan.FromMilliseconds(5000),
+                    Duration = TimeSpan.FromMilliseconds(5000),
                     Repeats = 18
                 },
 
                 PolishingSettings =
                 {
                     Enabled = true,
-                    Delay = TimeSpan.FromMilliseconds(5000),
+                    Duration = TimeSpan.FromMilliseconds(5000),
                     Repeats = 3
                 },
 
@@ -196,21 +196,21 @@ namespace NVs.Brusher.Wearable.Tests
                 SweepingSettings =
                 {
                     Enabled = true,
-                    Delay = TimeSpan.FromMilliseconds(5000),
+                    Duration = TimeSpan.FromMilliseconds(5000),
                     Repeats = 12
                 },
 
                 CleaningSettings =
                 {
                     Enabled = true,
-                    Delay = TimeSpan.FromMilliseconds(5000),
+                    Duration = TimeSpan.FromMilliseconds(5000),
                     Repeats = 18
                 },
 
                 PolishingSettings =
                 {
                     Enabled = true,
-                    Delay = TimeSpan.FromMilliseconds(5000),
+                    Duration = TimeSpan.FromMilliseconds(5000),
                     Repeats = 3
                 },
 

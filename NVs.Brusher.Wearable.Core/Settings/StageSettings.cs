@@ -5,17 +5,17 @@ namespace NVs.Brusher.Wearable.Core.Settings
     public sealed class StageSettings
     {
         private int repeats;
-        private TimeSpan delay;
+        private TimeSpan duration;
 
         public StageSettings()
         {
-            delay = TimeSpan.FromMilliseconds(1000);
+            duration = TimeSpan.FromMilliseconds(1000);
             repeats = 1;
         }
 
         private bool Equals(StageSettings other)
         {
-            return Enabled == other.Enabled && Delay.Equals(other.Delay) && Repeats == other.Repeats;
+            return Enabled == other.Enabled && Duration.Equals(other.Duration) && Repeats == other.Repeats;
         }
 
         public override bool Equals(object obj)
@@ -28,7 +28,7 @@ namespace NVs.Brusher.Wearable.Core.Settings
             unchecked
             {
                 var hashCode = Enabled.GetHashCode();
-                hashCode = (hashCode * 397) ^ Delay.GetHashCode();
+                hashCode = (hashCode * 397) ^ Duration.GetHashCode();
                 hashCode = (hashCode * 397) ^ Repeats;
                 return hashCode;
             }
@@ -36,16 +36,16 @@ namespace NVs.Brusher.Wearable.Core.Settings
 
         public bool Enabled { get; set; }
 
-        public TimeSpan Delay
+        public TimeSpan Duration
         {
-            get => delay;
+            get => duration;
             set
             {
                 if (value <= TimeSpan.Zero)
                 {
-                    throw new ArgumentException("This property does not accept empty TimeSpans", nameof(Delay));
+                    throw new ArgumentException("This property does not accept empty TimeSpans", nameof(Duration));
                 }
-                delay = value;
+                duration = value;
             }
         }
 

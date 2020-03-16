@@ -30,25 +30,25 @@ namespace NVs.Brusher.Wearable.Core.Settings
                 heartBitInterval = value;
             }
         }
-
+        
         public static readonly BrushingSettings Default = new BrushingSettings()
         {
             SweepingSettings =
             {
                 Enabled = true,
-                Delay = TimeSpan.FromSeconds(5),
+                Duration = TimeSpan.FromSeconds(5),
                 Repeats = 12
             },
 
             CleaningSettings = {
                 Enabled = true,
-                Delay = TimeSpan.FromSeconds(5),
+                Duration = TimeSpan.FromSeconds(5),
                 Repeats = 18
             },
 
             PolishingSettings = {
                 Enabled = true,
-                Delay = TimeSpan.FromSeconds(5),
+                Duration = TimeSpan.FromSeconds(5),
                 Repeats = 3
             },
             

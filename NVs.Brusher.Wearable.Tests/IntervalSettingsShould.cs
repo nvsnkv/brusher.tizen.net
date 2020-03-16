@@ -29,9 +29,9 @@ namespace NVs.Brusher.Wearable.Tests
         public void BeDifferentIfDelayDiffers()
         {
             var (left, right) = GetNewIntervalSettingsInstances();
-            right.Delay = 2 * left.Delay;
+            right.Duration = 2 * left.Duration;
 
-            Assert.False(left.Delay.Equals(right.Delay));
+            Assert.False(left.Duration.Equals(right.Duration));
             Assert.False(Equals(left, right));
         }
 
@@ -50,9 +50,9 @@ namespace NVs.Brusher.Wearable.Tests
         {
             var (left, right) = GetNewIntervalSettingsInstances();
             right.Repeats = 2 * left.Repeats;
-            right.Delay = 2 * left.Delay;
+            right.Duration = 2 * left.Duration;
 
-            Assert.False(left.Delay.Equals(right.Delay));
+            Assert.False(left.Duration.Equals(right.Duration));
             Assert.False(left.Repeats.Equals(right.Repeats));
             Assert.False(Equals(left, right));
         }
@@ -75,10 +75,10 @@ namespace NVs.Brusher.Wearable.Tests
             var (left, right) = GetNewIntervalSettingsInstances();
             right.Repeats = 2 * left.Repeats;
             right.Enabled = !left.Enabled;
-            right.Delay = 2 * left.Delay;
+            right.Duration = 2 * left.Duration;
 
             Assert.False(left.Enabled.Equals(right.Enabled));
-            Assert.False(left.Delay.Equals(right.Delay));
+            Assert.False(left.Duration.Equals(right.Duration));
             Assert.False(left.Repeats.Equals(right.Repeats));
             Assert.False(Equals(left, right));
         }
@@ -125,7 +125,7 @@ namespace NVs.Brusher.Wearable.Tests
                 // ReSharper disable once ObjectCreationAsStatement
                 new StageSettings()
                 {
-                    Delay = TimeSpan.Zero
+                    Duration = TimeSpan.Zero
                 };
             });
         }
@@ -138,7 +138,7 @@ namespace NVs.Brusher.Wearable.Tests
             var test = new StageSettings()
             {
                 Enabled = @new.Enabled,
-                Delay = @new.Delay,
+                Duration = @new.Duration,
                 Repeats = @new.Repeats
             };
         }
@@ -148,13 +148,13 @@ namespace NVs.Brusher.Wearable.Tests
             return (new StageSettings()
             {
                 Enabled = true,
-                Delay = TimeSpan.FromMinutes(1),
+                Duration = TimeSpan.FromMinutes(1),
                 Repeats = 1
             },
             new StageSettings()
             {
                 Enabled = true,
-                Delay = TimeSpan.FromMinutes(1),
+                Duration = TimeSpan.FromMinutes(1),
                 Repeats = 1
             });
         }

@@ -178,7 +178,7 @@ namespace NVs.Brusher.Wearable.Tests
         {
             var logger = new TestLogger();
 
-            var timer = new BrushingTimer(Notificator, logger).WithSettings(new BrushingSettings(){CleaningSettings = { Delay = TimeSpan.FromMilliseconds(300), Enabled = true, Repeats = 1}, HeartBitInterval = TimeSpan.FromMilliseconds(100)});
+            var timer = new BrushingTimer(Notificator, logger).WithSettings(new BrushingSettings(){CleaningSettings = { Duration = TimeSpan.FromMilliseconds(300), Enabled = true, Repeats = 1}, HeartBitInterval = TimeSpan.FromMilliseconds(100)});
             timer.Start();
             timer.Pause();
 
@@ -192,7 +192,7 @@ namespace NVs.Brusher.Wearable.Tests
         {
             var logger = new TestLogger();
 
-            var timer = new BrushingTimer(Notificator, logger).WithSettings(new BrushingSettings() { CleaningSettings = { Delay = TimeSpan.FromMilliseconds(300), Enabled = true, Repeats = 1 }, HeartBitInterval = TimeSpan.FromMilliseconds(100) });
+            var timer = new BrushingTimer(Notificator, logger).WithSettings(new BrushingSettings() { CleaningSettings = { Duration = TimeSpan.FromMilliseconds(300), Enabled = true, Repeats = 1 }, HeartBitInterval = TimeSpan.FromMilliseconds(100) });
             timer.Start();
 
             await Task.Delay(timer.RemainingDuration.Value + 2 * timer.Settings.HeartBitInterval);
@@ -204,7 +204,7 @@ namespace NVs.Brusher.Wearable.Tests
         {
             var logger = new TestLogger();
 
-            var timer = new BrushingTimer(Notificator, logger).WithSettings(new BrushingSettings() { CleaningSettings = { Delay = TimeSpan.FromMilliseconds(300), Enabled = true, Repeats = 1 }, HeartBitInterval = TimeSpan.FromMilliseconds(100) });
+            var timer = new BrushingTimer(Notificator, logger).WithSettings(new BrushingSettings() { CleaningSettings = { Duration = TimeSpan.FromMilliseconds(300), Enabled = true, Repeats = 1 }, HeartBitInterval = TimeSpan.FromMilliseconds(100) });
             timer.Start();
             timer.Pause();
 
@@ -219,7 +219,7 @@ namespace NVs.Brusher.Wearable.Tests
         {
             var logger = new TestLogger();
 
-            var timer = new BrushingTimer(Notificator, logger).WithSettings(new BrushingSettings() { CleaningSettings = { Delay = TimeSpan.FromMilliseconds(300), Enabled = true, Repeats = 1 }, HeartBitInterval = TimeSpan.FromMilliseconds(100) });
+            var timer = new BrushingTimer(Notificator, logger).WithSettings(new BrushingSettings() { CleaningSettings = { Duration = TimeSpan.FromMilliseconds(300), Enabled = true, Repeats = 1 }, HeartBitInterval = TimeSpan.FromMilliseconds(100) });
             timer.Start();
 
             await Task.Delay(2 * timer.Settings.HeartBitInterval);

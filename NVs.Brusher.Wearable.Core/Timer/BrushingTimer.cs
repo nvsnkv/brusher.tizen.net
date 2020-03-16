@@ -200,7 +200,7 @@ namespace NVs.Brusher.Wearable.Core.Timer
 
             for (var i = stageSettings.Repeats - 1; i >= 0 ; i--)
             {
-                schedule.Push(new CountdownTimerAction(stageSettings.Delay));
+                schedule.Push(new CountdownTimerAction(stageSettings.Duration));
             }
 
         }

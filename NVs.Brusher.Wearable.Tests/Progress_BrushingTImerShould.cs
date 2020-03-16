@@ -31,28 +31,28 @@ namespace NVs.Brusher.Wearable.Tests
                 SweepingSettings =                                  
                 {
                     Enabled = sweepEnabled,
-                    Delay = TimeSpan.FromMilliseconds(sweepDelay),
+                    Duration = TimeSpan.FromMilliseconds(sweepDelay),
                     Repeats = sweepRepeats
                 },
 
                 CleaningSettings =
                 {
                     Enabled = cleanEnabled,
-                    Delay = TimeSpan.FromMilliseconds(cleanDelay),
+                    Duration = TimeSpan.FromMilliseconds(cleanDelay),
                     Repeats = cleanRepeats
                 },
 
                 PolishingSettings =
                 {
                     Enabled = polishEnabled,
-                    Delay = TimeSpan.FromMilliseconds(polishDelay),
+                    Duration = TimeSpan.FromMilliseconds(polishDelay),
                     Repeats = polishRepeats
                 },
             });
 
-            var expected = timer.Settings.SweepingSettings.Delay * timer.Settings.SweepingSettings.Repeats * (timer.Settings.SweepingSettings.Enabled ? 1 : 0)
-                           + timer.Settings.CleaningSettings.Delay * timer.Settings.CleaningSettings.Repeats * (timer.Settings.CleaningSettings.Enabled ? 1 : 0)
-                           + timer.Settings.PolishingSettings.Delay * timer.Settings.PolishingSettings.Repeats * (timer.Settings.PolishingSettings.Enabled ? 1 : 0);
+            var expected = timer.Settings.SweepingSettings.Duration * timer.Settings.SweepingSettings.Repeats * (timer.Settings.SweepingSettings.Enabled ? 1 : 0)
+                           + timer.Settings.CleaningSettings.Duration * timer.Settings.CleaningSettings.Repeats * (timer.Settings.CleaningSettings.Enabled ? 1 : 0)
+                           + timer.Settings.PolishingSettings.Duration * timer.Settings.PolishingSettings.Repeats * (timer.Settings.PolishingSettings.Enabled ? 1 : 0);
 
             timer.Start();
             var remaining = timer.RemainingDuration;
@@ -70,9 +70,9 @@ namespace NVs.Brusher.Wearable.Tests
             var timer = new BrushingTimer(Notificator, Logger);
             timer.SetSettings(new BrushingSettings()
             {
-                CleaningSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(300), Repeats = 2 },
-                SweepingSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(100), Repeats = 3 },
-                PolishingSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(400), Repeats = 1},
+                CleaningSettings = { Enabled = true, Duration = TimeSpan.FromMilliseconds(300), Repeats = 2 },
+                SweepingSettings = { Enabled = true, Duration = TimeSpan.FromMilliseconds(100), Repeats = 3 },
+                PolishingSettings = { Enabled = true, Duration = TimeSpan.FromMilliseconds(400), Repeats = 1},
                 HeartBitInterval = TimeSpan.FromMilliseconds(100)
             });
 
@@ -103,7 +103,7 @@ namespace NVs.Brusher.Wearable.Tests
         {
             var timer = new BrushingTimer(Notificator, Logger).WithSettings(new BrushingSettings()
             {
-                CleaningSettings = { Enabled = true, Delay = TimeSpan.FromMilliseconds(100), Repeats = 5}, 
+                CleaningSettings = { Enabled = true, Duration = TimeSpan.FromMilliseconds(100), Repeats = 5}, 
                 HeartBitInterval = TimeSpan.FromMilliseconds(100)
             });
 
