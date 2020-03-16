@@ -14,7 +14,7 @@ namespace NVs.Brusher.Wearable.App.Views
         private readonly PushButton button;
 
         private readonly Vector4 startPauseLabelPadding = new Vector4(-27f, 0,0,0);
-        private readonly Vector4 coninueLabelPadding = new Vector4(-54f, 0, 0, 0);
+        private readonly Vector4 continueLabelPadding = new Vector4(-54f, 0, 0, 0);
 
         public TimerView(Layer counterLayer, DirectoryInfo directoryInfo, BrushingTimer brushingTimer)
         {
@@ -75,7 +75,7 @@ namespace NVs.Brusher.Wearable.App.Views
                     break;
                 case TimerState.Paused:
                     button.LabelText = "Continue";
-                    button.LabelPadding = coninueLabelPadding;
+                    button.LabelPadding = continueLabelPadding;
                     break;
                 case TimerState.Running:
                     button.LabelText = "Pause";
