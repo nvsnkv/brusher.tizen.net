@@ -1,10 +1,11 @@
 ﻿using System;
+using NVs.Brusher.Wearable.App.Controllers;
+using NVs.Brusher.Wearable.App.Views;
 using Tizen.NUI;
-using Tizen.NUI.BaseComponents;
 
 namespace NVs.Brusher.Wearable.App
 {
-    class BrusherApp : NUIApplication
+    sealed class BrusherApp : NUIApplication
     {
         protected override void OnCreate()
         {
@@ -14,20 +15,26 @@ namespace NVs.Brusher.Wearable.App
 
         void Initialize()
         {
-            Window.Instance.KeyEvent += OnKeyEvent;
+            Window.Instance.KeyEvent += OnBaseKeyEvent;
+            
+            var timerView = new TimerView(Window.Instance.GetDefaultLayer(), DirectoryInfo);
+            var timerViewController = new TimerViewController(timerView);
 
-            var counterLayer = Window.Instance.GetDefaultLayer();
-            var background = new ImageView(DirectoryInfo.Resource + "toothbrush-240.png")
-            {
-                PreMultipliedAlpha = true,
-                PositionX = 60f,
-                PositionY = 20f
-            };
-            counterLayer.Add(background);
+            this.KeyEvent += timerViewController.HandleKeyEvent;
+            this.KeyEvent += OnKeyEvent;
         }
 
-        public void OnKeyEvent(object sender, Window.KeyEventArgs e)
+        private event EventHandler<KeyEventArgs> KeyEvent;
+
+        void OnBaseKeyEvent(object sender, Window.KeyEventArgs e)
         {
+            RaiseKeyEvent(new KeyEventArgs(e));
+        }
+
+        private void OnKeyEvent(object sender, KeyEventArgs e)
+        {
+            if (e.Handled) return;
+
             if (e.Key.State == Key.StateType.Down && (e.Key.KeyPressedName == "XF86Back" || e.Key.KeyPressedName == "Escape"))
             {
                 Exit();
@@ -38,6 +45,11 @@ namespace NVs.Brusher.Wearable.App
         {
             var app = new BrusherApp();
             app.Run(args);
+        }
+
+        private void RaiseKeyEvent(KeyEventArgs e)
+        {
+            KeyEvent?.Invoke(this, e);
         }
     }
 }
