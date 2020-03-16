@@ -106,12 +106,15 @@ namespace NVs.Brusher.Wearable.Core.Timer
 
         public void Pause()
         {
+            logger.LogTrace("Pausing...");
             if (State != TimerState.Running)
             {
+                logger.LogWarning("Attempt made to pause timer which is not running");
                 return;
             }
 
             State = TimerState.Paused;
+            logger.LogDebug("Paused");
         }
 
         public void Stop()
